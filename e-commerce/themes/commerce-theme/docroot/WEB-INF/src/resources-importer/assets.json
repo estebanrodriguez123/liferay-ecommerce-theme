@@ -1,0 +1,61 @@
+{
+    "assets": [
+        {
+            "name": "product 1.xml",
+            "tags": [
+                "TVs", 
+                "Featured Product", 
+                "Electronic", 
+                "General"
+            ]
+        },
+        {
+            "name": "product 2.xml",
+            "tags": [
+                "General",
+                "Featured Product",
+                "Computers"
+            ]
+        },
+        {
+            "name": "product 3.xml",
+            "tags": [
+                "General",
+                "Featured Product",
+                "Video Games",
+                "Toys"
+            ]
+        },
+        {
+            "name": "product 4.xml",
+            "tags": [
+                "General",
+                "Featured Product",
+                "TVs"
+            ]
+        },
+        {
+            "name": "product 5.xml",
+            "tags": [
+                "General",
+                "Featured Product",
+                "Mobiles"
+            ]
+        },
+        {
+            "name": "product 6.xml",
+            "tags": [
+                "General",
+                "Computers"
+            ]
+        },
+        {
+            "name": "product 7.xml",
+            "tags": [
+                "General",
+                "Toys",
+                "Featured Product"
+            ]
+        }
+    ]
+}
