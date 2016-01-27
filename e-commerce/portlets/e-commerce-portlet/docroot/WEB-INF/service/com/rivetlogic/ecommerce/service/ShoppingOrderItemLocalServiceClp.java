@@ -133,6 +133,12 @@ public class ShoppingOrderItemLocalServiceClp
 		_methodParameterTypes22 = new String[] {
 				"com.rivetlogic.ecommerce.model.ShoppingOrderItem"
 			};
+
+		_methodName23 = "saveOrderItemsByProductId";
+
+		_methodParameterTypes23 = new String[] {
+				"java.util.List", "com.rivetlogic.ecommerce.model.ShoppingOrder"
+			};
 	}
 
 	@Override
@@ -805,6 +811,37 @@ public class ShoppingOrderItemLocalServiceClp
 		return (com.rivetlogic.ecommerce.model.ShoppingOrderItem)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
+	public void saveOrderItemsByProductId(
+		java.util.List<java.lang.String> productIdsList,
+		com.rivetlogic.ecommerce.model.ShoppingOrder shoppingOrder)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName23,
+				_methodParameterTypes23,
+				new Object[] {
+					ClpSerializer.translateInput(productIdsList),
+					
+				ClpSerializer.translateInput(shoppingOrder)
+				});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -850,4 +887,6 @@ public class ShoppingOrderItemLocalServiceClp
 	private String[] _methodParameterTypes21;
 	private String _methodName22;
 	private String[] _methodParameterTypes22;
+	private String _methodName23;
+	private String[] _methodParameterTypes23;
 }

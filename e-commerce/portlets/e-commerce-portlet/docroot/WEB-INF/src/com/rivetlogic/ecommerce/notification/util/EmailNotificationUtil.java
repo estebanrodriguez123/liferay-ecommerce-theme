@@ -17,12 +17,14 @@
 package com.rivetlogic.ecommerce.notification.util;
 
 import com.liferay.mail.service.MailServiceUtil;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.util.ContentUtil;
+import com.liferay.util.mail.MailEngine;
 import com.rivetlogic.ecommerce.notification.constants.NotificationConstants;
 
 import java.io.StringWriter;
@@ -38,14 +40,17 @@ import org.apache.velocity.app.Velocity;
 
 public class EmailNotificationUtil {
 	    
-	    public static void sendEmailNotification(Message message) throws Exception {
-	        MessageSender messageSender = processMessage(message);
-	        
-	        MailMessage mailMessage = new MailMessage(messageSender.getSender(), messageSender.getSubject(),
-	                messageSender.getBody(), messageSender.isHTMLFormat());
-	        
-	        mailMessage.setTo(messageSender.getRecipients());
-	        MailServiceUtil.sendEmail(mailMessage);
+	    public static void sendEmailNotification(Message message) throws SystemException {
+	    	try{
+		        MessageSender messageSender = processMessage(message);
+		        MailMessage mailMessage = new MailMessage(messageSender.getSender(), messageSender.getSubject(),
+		                messageSender.getBody(), messageSender.isHTMLFormat());
+		        mailMessage.setTo(messageSender.getRecipients());
+		        MailServiceUtil.sendEmail(mailMessage);
+	    	}catch(Exception e){
+	    		LOGGER.error(String.format(ERROR_SENDING_NOTIFICATION, message.getString(NotificationConstants.CMD), e.getMessage()));
+	    		throw new SystemException(e.getMessage());
+	    	}
 	    }
 	    
 	    private static MessageSender processMessage(Message message) throws Exception{
@@ -144,4 +149,6 @@ public class EmailNotificationUtil {
 	    private static final String LOG_TAG_VELOCITY = "velocityLogTag";
 		private static final Log LOGGER = LogFactoryUtil.getLog(EmailNotificationUtil.class);
 		private static final String TEMPLATE_PROCESSING_ERROR = "Error while processing an email velocity template. Template value: %S. %S";
+		private static final String ERROR_SENDING_NOTIFICATION = "Error while sending a notification. Notification Type: %S. %S";
+		private static final String ERROR_MAIL_SERVER_CONNECTION = "Could not connect to the mail server. Please verify the SMTP configuration an the mail server status.";
 }

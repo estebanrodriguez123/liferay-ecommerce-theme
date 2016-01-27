@@ -297,6 +297,13 @@ public class ShoppingOrderItemLocalServiceUtil {
 		return getService().updateOrderItem(shoppingOrderItem);
 	}
 
+	public static void saveOrderItemsByProductId(
+		java.util.List<java.lang.String> productIdsList,
+		com.rivetlogic.ecommerce.model.ShoppingOrder shoppingOrder)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService().saveOrderItemsByProductId(productIdsList, shoppingOrder);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

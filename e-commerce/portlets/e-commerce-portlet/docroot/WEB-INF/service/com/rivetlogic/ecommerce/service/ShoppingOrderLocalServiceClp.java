@@ -129,9 +129,17 @@ public class ShoppingOrderLocalServiceClp implements ShoppingOrderLocalService {
 				"com.rivetlogic.ecommerce.model.ShoppingOrder"
 			};
 
-		_methodName22 = "createOrder";
+		_methodName22 = "placeOrder";
 
-		_methodParameterTypes22 = new String[] { "long" };
+		_methodParameterTypes22 = new String[] {
+				"com.rivetlogic.ecommerce.model.ShoppingOrder",
+				"com.liferay.portal.kernel.messaging.Message[][]",
+				"java.util.List"
+			};
+
+		_methodName23 = "createOrder";
+
+		_methodParameterTypes23 = new String[] { "long" };
 	}
 
 	@Override
@@ -779,13 +787,47 @@ public class ShoppingOrderLocalServiceClp implements ShoppingOrderLocalService {
 	}
 
 	@Override
+	public void placeOrder(
+		com.rivetlogic.ecommerce.model.ShoppingOrder shoppingOrder,
+		com.liferay.portal.kernel.messaging.Message[] notifMessages,
+		java.util.List<java.lang.String> orderItemsProductIdsList)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName22,
+				_methodParameterTypes22,
+				new Object[] {
+					ClpSerializer.translateInput(shoppingOrder),
+					
+				ClpSerializer.translateInput(notifMessages),
+					
+				ClpSerializer.translateInput(orderItemsProductIdsList)
+				});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
 	public com.rivetlogic.ecommerce.model.ShoppingOrder createOrder(
 		long orderId) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName22,
-					_methodParameterTypes22, new Object[] { orderId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName23,
+					_methodParameterTypes23, new Object[] { orderId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -847,4 +889,6 @@ public class ShoppingOrderLocalServiceClp implements ShoppingOrderLocalService {
 	private String[] _methodParameterTypes21;
 	private String _methodName22;
 	private String[] _methodParameterTypes22;
+	private String _methodName23;
+	private String[] _methodParameterTypes23;
 }

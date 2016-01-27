@@ -131,6 +131,12 @@ public class ShoppingOrderItemLocalServiceClpInvoker {
 		_methodParameterTypes45 = new String[] {
 				"com.rivetlogic.ecommerce.model.ShoppingOrderItem"
 			};
+
+		_methodName47 = "saveOrderItemsByProductId";
+
+		_methodParameterTypes47 = new String[] {
+				"java.util.List", "com.rivetlogic.ecommerce.model.ShoppingOrder"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -255,6 +261,14 @@ public class ShoppingOrderItemLocalServiceClpInvoker {
 			return ShoppingOrderItemLocalServiceUtil.updateOrderItem((com.rivetlogic.ecommerce.model.ShoppingOrderItem)arguments[0]);
 		}
 
+		if (_methodName47.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
+			ShoppingOrderItemLocalServiceUtil.saveOrderItemsByProductId((java.util.List<java.lang.String>)arguments[0],
+				(com.rivetlogic.ecommerce.model.ShoppingOrder)arguments[1]);
+
+			return null;
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -302,4 +316,6 @@ public class ShoppingOrderItemLocalServiceClpInvoker {
 	private String[] _methodParameterTypes44;
 	private String _methodName45;
 	private String[] _methodParameterTypes45;
+	private String _methodName47;
+	private String[] _methodParameterTypes47;
 }

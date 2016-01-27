@@ -316,6 +316,15 @@ public class ShoppingOrderItemLocalServiceWrapper
 		return _shoppingOrderItemLocalService.updateOrderItem(shoppingOrderItem);
 	}
 
+	@Override
+	public void saveOrderItemsByProductId(
+		java.util.List<java.lang.String> productIdsList,
+		com.rivetlogic.ecommerce.model.ShoppingOrder shoppingOrder)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_shoppingOrderItemLocalService.saveOrderItemsByProductId(productIdsList,
+			shoppingOrder);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
