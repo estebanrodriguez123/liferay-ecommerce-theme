@@ -295,6 +295,15 @@ public class ShoppingOrderLocalServiceUtil {
 		return getService().updateOrder(shoppingOrder);
 	}
 
+	public static void placeOrder(
+		com.rivetlogic.ecommerce.model.ShoppingOrder shoppingOrder,
+		com.liferay.portal.kernel.messaging.Message[] notifMessages,
+		java.util.List<java.lang.String> orderItemsProductIdsList)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.placeOrder(shoppingOrder, notifMessages, orderItemsProductIdsList);
+	}
+
 	public static com.rivetlogic.ecommerce.model.ShoppingOrder createOrder(
 		long orderId) {
 		return getService().createOrder(orderId);

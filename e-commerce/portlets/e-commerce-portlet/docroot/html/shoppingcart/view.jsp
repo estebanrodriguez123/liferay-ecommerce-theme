@@ -74,7 +74,7 @@ String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(Pre
 												<portlet:param name="<%=ShoppingCartPortletConstants.WEB_CONTENT_ITEM_ID%>" value="<%= orderItem.getItemId() != 0l ? String.valueOf(orderItem.getItemId()): orderItem.getProductId()%>"/>
 												<portlet:param name="<%=ShoppingCartPortletConstants.WEB_CONTENT_ITEM_COUNT%>" value=""/>
 											</portlet:resourceURL>
-                        					<input type="number" value="<%= orderItem.getCount()%>" data-old-value="<%= orderItem.getCount()%>" placeholder="Qnt." class="input-mini quantity-input" data-url="${updateCartItemURL}">
+                        					<input type="number" value="<%= orderItem.getCount()%>" min="1" data-old-value="<%= orderItem.getCount()%>" placeholder="Qnt." class="input-mini quantity-input" data-url="${updateCartItemURL}">
                         				</div>
                         				<div class="span5">
 											<portlet:resourceURL var="removeCartItemURL">

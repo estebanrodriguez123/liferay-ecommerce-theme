@@ -28,14 +28,15 @@ import javax.portlet.PortletRequest;
 
 public class ShoppingCartPrefsBean {
 
-	private String senderEmail;
-	private String senderName;
 	private String customerNotifSubjectTemplate;
 	private String customerNotifBodyTemplate;
 	private String storeNotifSubjectTemplate;
 	private String storeNotifBodyTemplate;
 	private String storeEmail;
 	private String storeName;
+	private String checkoutSuccessMessage;
+	private String checkoutErrorMessage;
+	private String cartIsEmptyMessage;
 	
     public ShoppingCartPrefsBean(PortletRequest request) {
         PortletPreferences preferences = request.getPreferences();
@@ -43,14 +44,36 @@ public class ShoppingCartPrefsBean {
     }
     
     private void setFields(PortletPreferences portletPreferences){
-    	setSenderEmail(portletPreferences.getValue(PreferencesKeys.SENDER_EMAIL, StringPool.BLANK));
-    	setSenderName(portletPreferences.getValue(PreferencesKeys.SENDER_NAME, StringPool.BLANK));
     	setStoreNotifSubjectTemplate(portletPreferences.getValue(PreferencesKeys.STORE_NOTIF_SUBJECT_TEMPLATE, StringPool.BLANK));
     	setStoreNotifBodyTemplate(portletPreferences.getValue(PreferencesKeys.STORE_NOTIF_BODY_TEMPLATE, StringPool.BLANK));
     	setCustomerNotifSubjectTemplate(portletPreferences.getValue(PreferencesKeys.CUSTOMER_NOTIF_SUBJECT_TEMPLATE, StringPool.BLANK));
     	setCustomerNotifBodyTemplate(portletPreferences.getValue(PreferencesKeys.CUSTOMER_NOTIF_BODY_TEMPLATE, StringPool.BLANK));
     	setStoreEmail(portletPreferences.getValue(PreferencesKeys.STORE_EMAIL, StringPool.BLANK));
     	setStoreName(portletPreferences.getValue(PreferencesKeys.STORE_NAME, StringPool.BLANK));
+    	setCheckoutErrorMessage(portletPreferences.getValue(PreferencesKeys.CHECKOUT_ERROR_MESSAGE, StringPool.BLANK));
+    	setCheckoutSuccessMessage(portletPreferences.getValue(PreferencesKeys.CHECKOUT_SUCCESS_MESSAGE, StringPool.BLANK));
+    	setCartIsEmptyMessage(portletPreferences.getValue(PreferencesKeys.CART_EMPTY_MESSAGE, StringPool.BLANK));
+    }
+    
+    public boolean isCartPrefsValidForCheckout(){
+    	return ((null != getStoreEmail() && !getStoreEmail().isEmpty()) &&
+    	(null != getStoreName() && !getStoreName().isEmpty()) &&
+    	(null != getCustomerNotifSubjectTemplate() && !getCustomerNotifSubjectTemplate().isEmpty()) &&
+    	(null != getCustomerNotifBodyTemplate() && !getCustomerNotifBodyTemplate().isEmpty()) &&
+    	(null != getStoreNotifSubjectTemplate() && !getStoreNotifSubjectTemplate().isEmpty()) &&
+    	(null != getStoreNotifBodyTemplate() && !getStoreNotifBodyTemplate().isEmpty()));
+    }
+    
+    public boolean isCartPrefsValid(){
+    	return ((null != getStoreEmail() && !getStoreEmail().isEmpty()) &&
+    	(null != getStoreName() && !getStoreName().isEmpty()) &&
+    	(null != getCustomerNotifSubjectTemplate() && !getCustomerNotifSubjectTemplate().isEmpty()) &&
+    	(null != getCustomerNotifBodyTemplate() && !getCustomerNotifBodyTemplate().isEmpty()) &&
+    	(null != getStoreNotifSubjectTemplate() && !getStoreNotifSubjectTemplate().isEmpty()) &&
+    	(null != getStoreNotifBodyTemplate() && !getStoreNotifBodyTemplate().isEmpty()) &&
+    	(null != getCartIsEmptyMessage() && !getCartIsEmptyMessage().isEmpty()) &&
+    	(null != getCheckoutErrorMessage() && !getCheckoutErrorMessage().isEmpty()) &&
+    	(null != getCheckoutSuccessMessage() && !getCheckoutSuccessMessage().isEmpty()));
     }
     
 	public String getStoreEmail() {
@@ -67,22 +90,6 @@ public class ShoppingCartPrefsBean {
 
 	public void setStoreName(String storeName) {
 		this.storeName = storeName;
-	}
-
-	public String getSenderEmail() {
-		return senderEmail;
-	}
-
-	public void setSenderEmail(String senderEmail) {
-		this.senderEmail = senderEmail;
-	}
-
-	public String getSenderName() {
-		return senderName;
-	}
-
-	public void setSenderName(String senderName) {
-		this.senderName = senderName;
 	}
 
 	public String getCustomerNotifSubjectTemplate() {
@@ -116,5 +123,30 @@ public class ShoppingCartPrefsBean {
 	public void setStoreNotifBodyTemplate(String storeNotifBodyTemplate) {
 		this.storeNotifBodyTemplate = storeNotifBodyTemplate;
 	}
+
+	public String getCheckoutSuccessMessage() {
+		return checkoutSuccessMessage;
+	}
+
+	public void setCheckoutSuccessMessage(String checkoutSuccessMessage) {
+		this.checkoutSuccessMessage = checkoutSuccessMessage;
+	}
+
+	public String getCheckoutErrorMessage() {
+		return checkoutErrorMessage;
+	}
+
+	public void setCheckoutErrorMessage(String checkoutErrorMessage) {
+		this.checkoutErrorMessage = checkoutErrorMessage;
+	}
+
+	public String getCartIsEmptyMessage() {
+		return cartIsEmptyMessage;
+	}
+
+	public void setCartIsEmptyMessage(String cartIsEmptyMessage) {
+		this.cartIsEmptyMessage = cartIsEmptyMessage;
+	}
     
+	
 }

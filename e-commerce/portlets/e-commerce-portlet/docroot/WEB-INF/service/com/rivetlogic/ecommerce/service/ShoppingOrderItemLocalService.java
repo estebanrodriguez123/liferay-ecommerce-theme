@@ -267,4 +267,9 @@ public interface ShoppingOrderItemLocalService extends BaseLocalService,
 	public com.rivetlogic.ecommerce.model.ShoppingOrderItem updateOrderItem(
 		com.rivetlogic.ecommerce.model.ShoppingOrderItem shoppingOrderItem)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void saveOrderItemsByProductId(
+		java.util.List<java.lang.String> productIdsList,
+		com.rivetlogic.ecommerce.model.ShoppingOrder shoppingOrder)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

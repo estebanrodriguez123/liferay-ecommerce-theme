@@ -312,6 +312,16 @@ public class ShoppingOrderLocalServiceWrapper
 	}
 
 	@Override
+	public void placeOrder(
+		com.rivetlogic.ecommerce.model.ShoppingOrder shoppingOrder,
+		com.liferay.portal.kernel.messaging.Message[] notifMessages,
+		java.util.List<java.lang.String> orderItemsProductIdsList)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_shoppingOrderLocalService.placeOrder(shoppingOrder, notifMessages,
+			orderItemsProductIdsList);
+	}
+
+	@Override
 	public com.rivetlogic.ecommerce.model.ShoppingOrder createOrder(
 		long orderId) {
 		return _shoppingOrderLocalService.createOrder(orderId);
