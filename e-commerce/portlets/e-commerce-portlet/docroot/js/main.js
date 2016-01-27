@@ -56,8 +56,11 @@ AUI.add('shopping-cart', function(A, NAME) {
     ns.updateCartItem = function(quantityInput) {
     	var updateUrl = quantityInput.getData('url');
     	var oldValue = quantityInput.getData('old-value');
-    	var newValue = quantityInput.val();
-    	console.log('old value: '+oldValue + 'new value: '+newValue);
+    	var newValue = Math.floor(parseFloat(quantityInput.val()));
+    	if(isNaN(newValue) || newValue <= 0){
+    		quantityInput.set('value', oldValue);
+    		return;
+    	}
         A.io.request(updateUrl + '&' + pns + 'itemCount=' + newValue, {
             method : 'get',
             dataType : 'json',
@@ -70,8 +73,7 @@ AUI.add('shopping-cart', function(A, NAME) {
                 	A.one('#cart_badge').html(this.get('responseData').cartDetails['quantity']);
                 },
                 error: function(event, id, obj){
-                	console.log('ERROR UPDATING');
-                	quantityInput.value = oldValue;
+                	quantityInput.set('value', oldValue);
                 }
             }
         });

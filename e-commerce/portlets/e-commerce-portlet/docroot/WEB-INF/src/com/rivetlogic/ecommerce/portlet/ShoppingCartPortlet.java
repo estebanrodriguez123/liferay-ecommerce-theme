@@ -184,29 +184,31 @@ public class ShoppingCartPortlet extends MVCPortlet {
 	public void checkout(ActionRequest request, ActionResponse response)
 			throws IOException {
 		
+		SessionMessages.add(request, PortalUtil.getPortletId(request) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
+		SessionMessages.add(request, PortalUtil.getPortletId(request) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
+		
+		String redirect = ParamUtil.getString(request, WebKeys.REDIRECT);
+		
 		if(!validateCheckoutInfo(request)){
 			SessionErrors.add(request, ShoppingCartPortletConstants.MESSAGE_MISSING_REQUIRED_CHECKOUT_INFO);
-			return;
+			response.sendRedirect(redirect);
 		}
 		if(!(new ShoppingCartPrefsBean(request).isCartPrefsValidForCheckout())){
 			SessionErrors.add(request, ShoppingCartPortletConstants.ERROR_MESSAGE_CHECKOUT);
 			logger.error(ERROR_CHECKOUT_MISSING_PORTLET_CONFIG);
-			return;
+			response.sendRedirect(redirect);
 		}
-		
 		try {
 			doCheckout(request, response);
 		} catch (Exception e) {
 			SessionErrors.add(request, ShoppingCartPortletConstants.ERROR_MESSAGE_CHECKOUT);
 			logger.error(e.getMessage());
 		}
-		String redirect = ParamUtil.getString(request, WebKeys.REDIRECT);
+		
 		response.sendRedirect(redirect);
 	}
 	
 	private void doCheckout(ActionRequest request, ActionResponse response) throws Exception{
-		SessionMessages.add(request, PortalUtil.getPortletId(request) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
-		SessionMessages.add(request, PortalUtil.getPortletId(request) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		ShoppingOrder activeShoppingOrder = null;
 		List<String> orderItemsIdsList = null;
@@ -243,20 +245,6 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		ShoppingOrderLocalServiceUtil.placeOrder(activeShoppingOrder, new Message[]{customerMessage, storeMessage}, orderItemsIdsList);
 		removeOrderItemsIdsFromSession(request);
 		SessionMessages.add(request, ShoppingCartPortletConstants.SUCCESS_MESSAGE_CHECKOUT);
-	}
-
-	private List<ShoppingCartItem> getCartItemsByProductId(List<String>productsIdList, ThemeDisplay themeDisplay){
-		List<ShoppingCartItem> shoppingCartItemsList = null;
-		if(null != productsIdList && null != themeDisplay){
-			shoppingCartItemsList = new ArrayList<ShoppingCartItem>();
-			for(String itemProductId : productsIdList){
-				ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
-				shoppingCartItem.setProductId(itemProductId);
-				setCartItemDetails(itemProductId, themeDisplay, shoppingCartItem);
-				shoppingCartItemsList.add(shoppingCartItem);
-			}
-		}
-		return shoppingCartItemsList;
 	}
 	
 	private Message getNotificationMessage(ThemeDisplay themeDisplay, ShoppingOrder shoppingOrder, List<String> cartItemsProductIdList, 
@@ -610,6 +598,20 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				+ VIEW_PAGE_PATH + shoppingCartItem.getProductId());
 	}
 	
+	private List<ShoppingCartItem> getCartItemsByProductId(List<String>productsIdList, ThemeDisplay themeDisplay){
+		List<ShoppingCartItem> shoppingCartItemsList = null;
+		if(null != productsIdList && null != themeDisplay){
+			shoppingCartItemsList = new ArrayList<ShoppingCartItem>();
+			for(String itemProductId : productsIdList){
+				ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+				shoppingCartItem.setProductId(itemProductId);
+				setCartItemDetails(itemProductId, themeDisplay, shoppingCartItem);
+				shoppingCartItemsList.add(shoppingCartItem);
+			}
+		}
+		return shoppingCartItemsList;
+	}
+	
 	private List<String> getOrderItemsIdsFromSession(PortletRequest request) {
 		List<String> orderItemsIdsList = null;
 		PortletSession portletSession = request.getPortletSession();
@@ -686,7 +688,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 	private static final String ERROR_UPDATING_CART_ITEM_LOG = "Error while updating cart item with id: %S. %S";
 	private static final String ERROR_ITEM_ID_NOT_VALID_LOG = "The item id with id %S was not found.";
 	private static final String ERROR_CHECKING_PORTLET_CONFIG = "Error while checking the portlet configuration. %S";
-	private static final String ERROR_CHECKOUT_MISSING_PORTLET_CONFIG = "\n Portlet configuration is not complete. Some information in the portlet configuration is missing. \n";
+	private static final String ERROR_CHECKOUT_MISSING_PORTLET_CONFIG = "\n PORTLET CONFIGURATION IS NOT COMPLETE. Some information in the portlet configuration is missing. \n";
 	
 	private static final String WEB_PAGE_PATH = "/web";
 	private static final String VIEW_PAGE_PATH = "/view?id=";
