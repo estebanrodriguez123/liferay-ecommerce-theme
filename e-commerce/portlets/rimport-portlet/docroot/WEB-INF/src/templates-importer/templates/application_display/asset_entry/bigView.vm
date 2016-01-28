@@ -99,7 +99,7 @@
                                             <dt>List Price</dt>
                                             <dd><s>$$listPrice</s></dd>
                                             <dt>Sale Price</dt>
-                                            <dd>$$salePrice</dd>
+                                            <dd><strong>$$salePrice</strong></dd>
                                         #else
                                             <dt>List Price</dt>
                                             <dd>$$listPrice</dd>
