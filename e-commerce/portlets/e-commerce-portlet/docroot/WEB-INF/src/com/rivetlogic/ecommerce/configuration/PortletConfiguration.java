@@ -46,7 +46,7 @@ public class PortletConfiguration extends DefaultConfigurationAction{
 	@Override
 	public String render(PortletConfig portletConfig, RenderRequest renderRequest, RenderResponse renderResponse) throws Exception{
 		checkPorletConfiguration(renderRequest);
-		renderRequest.setAttribute("portletConfig", new ShoppingCartPrefsBean(renderRequest));
+		renderRequest.setAttribute(PreferencesKeys.PORTLET_CONFIG, new ShoppingCartPrefsBean(renderRequest));
 		return super.render(portletConfig, renderRequest, renderResponse);
 	}
 	
@@ -81,7 +81,6 @@ public class PortletConfiguration extends DefaultConfigurationAction{
 		for(String defaultPropertyKey : defaultValuesProps){
 			String propertyValue = PortletProps.get(defaultPropertyKey);
 			if(null != propertyValue){
-				System.out.println("Key: "+defaultPropertyKey +" (translated: "+ translateKey(defaultPropertyKey) +") "+ " , value: "+propertyValue);
 				defaultPropsMap.put(translateKey(defaultPropertyKey), propertyValue);
 			}
 		}

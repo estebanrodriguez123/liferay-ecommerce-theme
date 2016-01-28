@@ -24,7 +24,7 @@
 <liferay-portlet:actionURL portletConfiguration="true" var="configurationURL" />
 
 <%
-ShoppingCartPrefsBean shoppingCartPrefsBean = (ShoppingCartPrefsBean)request.getAttribute("portletConfig");
+ShoppingCartPrefsBean shoppingCartPrefsBean = (ShoppingCartPrefsBean)request.getAttribute(PreferencesKeys.PORTLET_CONFIG);
 %>
 <div class="alert alert-danger <%= (shoppingCartPrefsBean.isCartPrefsValid() ? "hidden" : StringPool.BLANK) %>" id="error-message">
   <strong>All</strong> configuration fields are required. Looks like you did not enter all of them!

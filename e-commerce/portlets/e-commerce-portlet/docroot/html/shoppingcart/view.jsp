@@ -23,7 +23,7 @@
 <portlet:defineObjects />
 
 <% 
-List<ShoppingCartItem>cartItemsIdsList = (List<ShoppingCartItem>) request.getAttribute("currentOrderItems");
+List<ShoppingCartItem>cartItemsIdsList = (List<ShoppingCartItem>) request.getAttribute(ShoppingCartPortletConstants.CURRENT_ORDER_ITEMS);
 String checkoutSuccessMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CHECKOUT_SUCCESS_MESSAGE, StringPool.BLANK));
 String checkoutErrorMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CHECKOUT_ERROR_MESSAGE, StringPool.BLANK));
 String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CART_EMPTY_MESSAGE, StringPool.BLANK));
@@ -118,17 +118,17 @@ String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(Pre
             <div class="row-fluid">
               <div class="control-group span6">
                 <label for="email">Email Address <span class="text-error">*</span></label>
-                <input type="text" id="email" value="" name="<portlet:namespace />email" placeholder="Email Address" required="true">
+                <input type="text" id="email" value="" name="<portlet:namespace />email" placeholder="Email Address" required>
               </div>  
               <div class="control-group span6">
                 <label for="name">Name <span class="text-error">*</span></label>
-                <input type="text" id="name" value="" name="<portlet:namespace />name" placeholder="Full Name" required="true">
+                <input type="text" id="name" value="" name="<portlet:namespace />name" placeholder="Full Name" required>
               </div>
             </div>
             <div class="row-fluid">
               <div class="control-group span6">
                 <label for="street">Address line 1 <span class="text-error">*</span></label>
-                <input type="text" id="street1" value="" name="<portlet:namespace />address1" placeholder="Street Address" required="true">
+                <input type="text" id="street1" value="" name="<portlet:namespace />address1" placeholder="Street Address" required>
               </div>
               <div class="control-group span6">
                 <label for="street">Address line 2 </label>
@@ -138,11 +138,11 @@ String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(Pre
             <div class="row-fluid">
               <div class="control-group span6">
                 <label for="city">City <span class="text-error">*</span></label>
-                <input type="text" id="city" value="" name="<portlet:namespace />city" placeholder="City" required="true">
+                <input type="text" id="city" value="" name="<portlet:namespace />city" placeholder="City" required>
               </div> 
               <div class="control-group span6">
                 <label for="State">State/Province <span class="text-error">*</span></label>
-                <input type="text" id="State" value="" name="<portlet:namespace />stateProvince" placeholder="State" required="true">
+                <input type="text" id="State" value="" name="<portlet:namespace />stateProvince" placeholder="State" required>
               </div>  
             </div>
             <div class="row-fluid">
@@ -152,7 +152,7 @@ String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(Pre
               </div> 
               <div class="control-group span6">
                 <label for="country">Country <span class="text-error">*</span></label>
-                <select id="country" name="<portlet:namespace />country" required="true">
+                <select id="country" name="<portlet:namespace />country" required>
                   <option value="" disabled selected>Select your option</option>
                   <option value="AF">Afghanistan</option>
                   <option value="AX">Åland Islands</option>
