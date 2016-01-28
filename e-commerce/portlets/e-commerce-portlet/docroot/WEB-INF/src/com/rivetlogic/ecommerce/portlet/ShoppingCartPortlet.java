@@ -672,6 +672,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				+ themeDisplay.getLayoutSet().getLogoId();
 	}
 
+	
 	private static final Log logger = LogFactoryUtil.getLog(ShoppingCartPortlet.class);
 	
 	// Error response messages

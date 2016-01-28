@@ -16,7 +16,6 @@
 
 package com.rivetlogic.ecommerce.notification.util;
 
-import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -46,7 +45,7 @@ public class EmailNotificationUtil {
 		        MailMessage mailMessage = new MailMessage(messageSender.getSender(), messageSender.getSubject(),
 		                messageSender.getBody(), messageSender.isHTMLFormat());
 		        mailMessage.setTo(messageSender.getRecipients());
-		        MailServiceUtil.sendEmail(mailMessage);
+		        MailEngine.send(mailMessage);
 	    	}catch(Exception e){
 	    		LOGGER.error(String.format(ERROR_SENDING_NOTIFICATION, message.getString(NotificationConstants.CMD), e.getMessage()));
 	    		throw new SystemException(e.getMessage());
@@ -150,5 +149,4 @@ public class EmailNotificationUtil {
 		private static final Log LOGGER = LogFactoryUtil.getLog(EmailNotificationUtil.class);
 		private static final String TEMPLATE_PROCESSING_ERROR = "Error while processing an email velocity template. Template value: %S. %S";
 		private static final String ERROR_SENDING_NOTIFICATION = "Error while sending a notification. Notification Type: %S. %S";
-		private static final String ERROR_MAIL_SERVER_CONNECTION = "Could not connect to the mail server. Please verify the SMTP configuration an the mail server status.";
 }

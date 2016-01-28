@@ -38,4 +38,6 @@ public class PreferencesKeys {
 	public static final String DEFAULT_MESSAGE_CART_EMPTY = "default.message.cartEmpty";
 	public static final String DEFAULT_MESSAGE_CHECKOUT_ERROR = "default.message.checkout.error";
 	public static final String DEFAULT_MESSAGE_CHECKOUT_SUCCESS = "default.message.checkout.success";
+	
+	public static final String PORTLET_CONFIG = "portletConfig";
 }
