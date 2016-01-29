@@ -18,81 +18,62 @@
 --%>
 
 <%@include file="/html/init.jsp" %>
+<%@page import="com.rivetlogic.ecommerce.beans.ShoppingCartPrefsBean" %>
 <portlet:defineObjects />
 
 <liferay-portlet:actionURL portletConfiguration="true" var="configurationURL" />
+
 <%
-
-String storeEmailAddress = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.STORE_EMAIL, StringPool.BLANK));
-String storeName = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.STORE_NAME, StringPool.BLANK));
-String storeEmailSubject = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.STORE_NOTIF_SUBJECT_TEMPLATE, StringPool.BLANK));
-String storeEmailContent = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.STORE_NOTIF_BODY_TEMPLATE, StringPool.BLANK));
-
-String customerEmailSubject = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CUSTOMER_NOTIF_SUBJECT_TEMPLATE, StringPool.BLANK));
-String customerEmailContent = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CUSTOMER_NOTIF_BODY_TEMPLATE, StringPool.BLANK));
-
-String checkoutSuccessMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CHECKOUT_SUCCESS_MESSAGE, StringPool.BLANK));
-String checkoutErrorMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CHECKOUT_ERROR_MESSAGE, StringPool.BLANK));
-String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CART_EMPTY_MESSAGE, StringPool.BLANK));
+ShoppingCartPrefsBean shoppingCartPrefsBean = (ShoppingCartPrefsBean)request.getAttribute(PreferencesKeys.PORTLET_CONFIG);
 %>
+<div class="alert alert-danger <%= (shoppingCartPrefsBean.isCartPrefsValid() ? "hidden" : StringPool.BLANK) %>" id="error-message">
+  <strong>All</strong> configuration fields are required. Looks like you did not enter all of them!
+</div>
 
 <liferay-ui:tabs names="Store Email,Customer Email,Messages" refresh="false" tabsValues="Store Email,Customer Email,Messages" type="pills">
-    <liferay-ui:section>
-		<aui:form action="<%= configurationURL %>" method="post" name="<portlet:namespace />fm">
-		    <aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
-		    <aui:input name="preferences--storeEmail--" label="email-label" type="text" value="<%= storeEmailAddress %>" />
-		    <aui:input name="preferences--storeName--" label="name-label" type="text" value="<%= storeName %>" />
-			<aui:input name="preferences--storeEmailSubject--" label="email-subject-label" type="text" value="<%= storeEmailSubject %>" />
-			<liferay-ui:input-editor name="storeEmailEditor" initMethod="initStoreEmailEditor" editorImpl="liferay"/>
-			<aui:input name="preferences--storeEmailContent--" id="store-email-content" type="hidden" value="<%= storeEmailContent %>" />
-		    <aui:button-row>
-		        <aui:button type="submit" onclick="getStoreEmailText()"/>
-		    </aui:button-row>
-		</aui:form>
-    </liferay-ui:section>
-    <liferay-ui:section>
-		<aui:form action="<%= configurationURL %>" method="post" name="<portlet:namespace />fm">
-		    <aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
-			<aui:input name="preferences--customerEmailSubject--" label="email-subject-label" type="text" value="<%= customerEmailSubject %>" />
+	<aui:form action="<%= configurationURL %>" method="post" name="fm">
+		<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
+	    <liferay-ui:section>
+			    <aui:input name="preferences--storeEmail--" label="email-label" type="text" value="<%= shoppingCartPrefsBean.getStoreEmail() %>"  required="true"/>
+			    <aui:input name="preferences--storeName--" label="name-label" type="text" value="<%= shoppingCartPrefsBean.getStoreName() %>" required="true"/>
+				<aui:input name="preferences--storeEmailSubject--" label="email-subject-label" type="text" value="<%= shoppingCartPrefsBean.getStoreNotifSubjectTemplate() %>" required="true"/>
+				<liferay-ui:input-editor name="storeEmailEditor" initMethod="initStoreEmailEditor" editorImpl="liferay"/>
+				<aui:input name="preferences--storeEmailContent--" id="store-email-content" type="hidden" value="<%= shoppingCartPrefsBean.getStoreNotifBodyTemplate() %>" required="true"/>
+	    </liferay-ui:section>
+	    <liferay-ui:section>
+			<aui:input name="preferences--customerEmailSubject--" label="email-subject-label" type="text" value="<%= shoppingCartPrefsBean.getCustomerNotifSubjectTemplate() %>" required="true"/>
 			<liferay-ui:input-editor name="customerEmailEditor" initMethod="initCustomerEmailEditor"/>
-			<aui:input name="preferences--customerEmailContent--" id="customer-email-content" type="hidden" value="<%= customerEmailContent %>" />
-		    <aui:button-row>
-		        <aui:button type="submit" onclick="getCustomerEmailText()"/>
-		    </aui:button-row>
-		</aui:form>
-    </liferay-ui:section>
-    <liferay-ui:section>
-		<aui:form action="<%= configurationURL %>" method="post" name="<portlet:namespace />fm">
-		    <aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
-			<aui:input name="preferences--checkoutSuccessMessage--" label="checkout-success-label" type="text" value="<%= checkoutSuccessMessage %>" />
-			<aui:input name="preferences--checkoutErrorMessage--" label="checkout-error-label" type="text" value="<%= checkoutErrorMessage %>" />
-			<aui:input name="preferences--cartEmptyMessage--" label="empty-cart-message-label" type="text" value="<%= cartIsEmptyMessage %>" />
-		    <aui:button-row>
-		        <aui:button type="submit"/>
-		    </aui:button-row>
-		</aui:form>
-    </liferay-ui:section>
+			<aui:input name="preferences--customerEmailContent--" id="customer-email-content" type="hidden" value="<%= shoppingCartPrefsBean.getCustomerNotifBodyTemplate() %>" required="true"/>
+	    </liferay-ui:section>
+	    <liferay-ui:section>
+			<aui:input name="preferences--checkoutSuccessMessage--" label="checkout-success-label" type="text" value="<%= shoppingCartPrefsBean.getCheckoutSuccessMessage() %>" required="true"/>
+			<aui:input name="preferences--checkoutErrorMessage--" label="checkout-error-label" type="text" value="<%= shoppingCartPrefsBean.getCheckoutErrorMessage() %>" required="true"/>
+			<aui:input name="preferences--cartEmptyMessage--" label="empty-cart-message-label" type="text" value="<%= shoppingCartPrefsBean.getCartIsEmptyMessage() %>" required="true"/>
+	    </liferay-ui:section>
+ 		<aui:button-row>
+		   	<aui:button type="submit" onclick="getEmailsText()"/>
+		</aui:button-row>
+    </aui:form>
 </liferay-ui:tabs>
-
 
 <script type="text/javascript">
 
 function <portlet:namespace />initStoreEmailEditor() {
-	return '<%=UnicodeFormatter.toString(storeEmailContent)%>';
+	return '<%=UnicodeFormatter.toString(shoppingCartPrefsBean.getStoreNotifBodyTemplate())%>';
 }
 
 function <portlet:namespace />initCustomerEmailEditor() {
-	return '<%=UnicodeFormatter.toString(customerEmailContent)%>';
+	return '<%=UnicodeFormatter.toString(shoppingCartPrefsBean.getCustomerNotifBodyTemplate())%>';
 }
 
-function getStoreEmailText() {
-	var pns = '<portlet:namespace />';
-	document.getElementById(pns + 'store-email-content').value = window[pns+'storeEmailEditor'].getHTML();
-}
-
-function getCustomerEmailText() {
+function getEmailsText() {
 	var pns = '<portlet:namespace />';
 	document.getElementById(pns + 'customer-email-content').value = window[pns+'customerEmailEditor'].getHTML();
+	document.getElementById(pns + 'store-email-content').value = window[pns+'storeEmailEditor'].getHTML();
+	var invalidFiels = document.getElementsByClassName('error-field'); 
+	if(invalidFiels && invalidFiels.length > 0){
+		document.getElementById('error-message').className = 'alert alert-danger'; 
+	}
 }
 
 </script>

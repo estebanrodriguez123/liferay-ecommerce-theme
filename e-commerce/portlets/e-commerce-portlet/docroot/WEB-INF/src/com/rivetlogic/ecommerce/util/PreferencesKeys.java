@@ -28,4 +28,16 @@ public class PreferencesKeys {
 	public static final String CHECKOUT_SUCCESS_MESSAGE = "checkoutSuccessMessage";
 	public static final String CHECKOUT_ERROR_MESSAGE = "checkoutErrorMessage";
 	public static final String CART_EMPTY_MESSAGE = "cartEmptyMessage";
+	
+	public static final String CHANGED = "changed";
+	
+	public static final String DEFAULT_STORE_EMAIL_SUBJECT = "default.store.email.subject";
+	public static final String DEFAULT_STORE_EMAIL_BODY = "default.store.email.body";
+	public static final String DEFAULT_CUSTOMER_EMAIL_SUBJECT = "default.customer.email.subject";
+	public static final String DEFAULT_CUSTOMER_EMAIL_BODY = "default.customer.email.body";
+	public static final String DEFAULT_MESSAGE_CART_EMPTY = "default.message.cartEmpty";
+	public static final String DEFAULT_MESSAGE_CHECKOUT_ERROR = "default.message.checkout.error";
+	public static final String DEFAULT_MESSAGE_CHECKOUT_SUCCESS = "default.message.checkout.success";
+	
+	public static final String PORTLET_CONFIG = "portletConfig";
 }

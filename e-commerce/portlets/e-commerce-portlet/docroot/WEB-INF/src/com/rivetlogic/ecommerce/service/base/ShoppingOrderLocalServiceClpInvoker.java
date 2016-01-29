@@ -1,15 +1,15 @@
 /**
  * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
- * distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *
- *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.rivetlogic.ecommerce.service.base;
@@ -128,9 +128,17 @@ public class ShoppingOrderLocalServiceClpInvoker {
 				"com.rivetlogic.ecommerce.model.ShoppingOrder"
 			};
 
-		_methodName45 = "createOrder";
+		_methodName45 = "placeOrder";
 
-		_methodParameterTypes45 = new String[] { "long" };
+		_methodParameterTypes45 = new String[] {
+				"com.rivetlogic.ecommerce.model.ShoppingOrder",
+				"com.liferay.portal.kernel.messaging.Message[][]",
+				"java.util.List"
+			};
+
+		_methodName46 = "createOrder";
+
+		_methodParameterTypes46 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -255,6 +263,15 @@ public class ShoppingOrderLocalServiceClpInvoker {
 
 		if (_methodName45.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
+			ShoppingOrderLocalServiceUtil.placeOrder((com.rivetlogic.ecommerce.model.ShoppingOrder)arguments[0],
+				(com.liferay.portal.kernel.messaging.Message[])arguments[1],
+				(java.util.List<java.lang.String>)arguments[2]);
+
+			return null;
+		}
+
+		if (_methodName46.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes46, parameterTypes)) {
 			return ShoppingOrderLocalServiceUtil.createOrder(((Long)arguments[0]).longValue());
 		}
 
@@ -305,4 +322,6 @@ public class ShoppingOrderLocalServiceClpInvoker {
 	private String[] _methodParameterTypes44;
 	private String _methodName45;
 	private String[] _methodParameterTypes45;
+	private String _methodName46;
+	private String[] _methodParameterTypes46;
 }

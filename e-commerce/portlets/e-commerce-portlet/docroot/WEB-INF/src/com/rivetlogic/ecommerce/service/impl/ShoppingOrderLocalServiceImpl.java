@@ -16,8 +16,11 @@ package com.rivetlogic.ecommerce.service.impl;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.rivetlogic.ecommerce.model.ShoppingOrder;
+import com.rivetlogic.ecommerce.notification.util.EmailNotificationUtil;
+import com.rivetlogic.ecommerce.service.ShoppingOrderItemLocalServiceUtil;
 import com.rivetlogic.ecommerce.service.ShoppingOrderLocalServiceUtil;
 import com.rivetlogic.ecommerce.service.base.ShoppingOrderLocalServiceBaseImpl;
 import com.rivetlogic.ecommerce.service.persistence.ShoppingOrderUtil;
@@ -74,6 +77,16 @@ public class ShoppingOrderLocalServiceImpl
 	public ShoppingOrder updateOrder(ShoppingOrder shoppingOrder) throws SystemException{
 		shoppingOrder.setModifiedDate(DateUtil.newDate());
 		return updateShoppingOrder(shoppingOrder);
+	}
+	
+	public void placeOrder(ShoppingOrder shoppingOrder, Message notifMessages[], List<String>orderItemsProductIdsList) throws SystemException{
+		shoppingOrder.setOrderStatus(OrderStatusEnum.PLACED.toString());
+		updateOrder(shoppingOrder);
+		ShoppingOrderItemLocalServiceUtil.saveOrderItemsByProductId(orderItemsProductIdsList, shoppingOrder);
+		if(null != notifMessages)
+			for(Message message : notifMessages){
+				EmailNotificationUtil.sendEmailNotification(message);
+			}
 	}
 	
 	public ShoppingOrder createOrder(long orderId){

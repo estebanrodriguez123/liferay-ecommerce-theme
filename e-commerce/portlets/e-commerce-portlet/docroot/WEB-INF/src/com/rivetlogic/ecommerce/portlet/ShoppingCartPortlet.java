@@ -45,13 +45,12 @@ import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.rivetlogic.ecommerce.beans.ShoppingCartPrefsBean;
 import com.rivetlogic.ecommerce.cart.ShoppingCartItem;
+import com.rivetlogic.ecommerce.configuration.PortletConfiguration;
 import com.rivetlogic.ecommerce.model.ShoppingOrder;
 import com.rivetlogic.ecommerce.model.ShoppingOrderItem;
 import com.rivetlogic.ecommerce.notification.constants.NotificationConstants;
-import com.rivetlogic.ecommerce.notification.util.EmailNotificationUtil;
 import com.rivetlogic.ecommerce.service.ShoppingOrderItemLocalServiceUtil;
 import com.rivetlogic.ecommerce.service.ShoppingOrderLocalServiceUtil;
-import com.rivetlogic.ecommerce.util.OrderStatusEnum;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -68,12 +67,13 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
 import javax.portlet.PortletSession;
+import javax.portlet.ReadOnlyException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.portlet.ValidatorException;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -81,6 +81,24 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 public class ShoppingCartPortlet extends MVCPortlet {
+	
+	@Override
+	public void render(RenderRequest request, RenderResponse response) throws IOException, PortletException {
+	
+		try {
+			PortletConfiguration.checkPorletConfiguration(request);
+		} catch (ReadOnlyException e) {
+			logger.error(String.format(ERROR_CHECKING_PORTLET_CONFIG, e.getMessage()));
+			throw e;
+		} catch (ValidatorException e) {
+			logger.error(String.format(ERROR_CHECKING_PORTLET_CONFIG, e.getMessage()));
+			throw e;
+		} catch (IOException e) {
+			logger.error(String.format(ERROR_CHECKING_PORTLET_CONFIG, e.getMessage()));
+			throw e;
+		}
+		super.render(request, response);
+	}
 	
 	@Override
 	public void doView(RenderRequest request, RenderResponse response)
@@ -165,34 +183,35 @@ public class ShoppingCartPortlet extends MVCPortlet {
 	
 	public void checkout(ActionRequest request, ActionResponse response)
 			throws IOException {
-		String name = ParamUtil.getString(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_NAME);
-		String email = ParamUtil.getString(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_EMAIL);
-		String address1 = ParamUtil.getString(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_ADDRESS_1);
-		String city = ParamUtil.getString(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_CITY);
-		String stateProvince = ParamUtil.getString(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_STATE_PROVINCE);
-		if ((name == null || name.isEmpty())
-				|| (email == null || email.isEmpty())
-				|| (address1 == null || address1.isEmpty())
-				|| (city == null || city.isEmpty())
-				|| (stateProvince == null || stateProvince.isEmpty())) {
+		
+		SessionMessages.add(request, PortalUtil.getPortletId(request) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
+		SessionMessages.add(request, PortalUtil.getPortletId(request) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
+		
+		String redirect = ParamUtil.getString(request, WebKeys.REDIRECT);
+		
+		if(!validateCheckoutInfo(request)){
 			SessionErrors.add(request, ShoppingCartPortletConstants.MESSAGE_MISSING_REQUIRED_CHECKOUT_INFO);
+			response.sendRedirect(redirect);
+		}
+		if(!(new ShoppingCartPrefsBean(request).isCartPrefsValidForCheckout())){
+			SessionErrors.add(request, ShoppingCartPortletConstants.ERROR_MESSAGE_CHECKOUT);
+			logger.error(ERROR_CHECKOUT_MISSING_PORTLET_CONFIG);
+			response.sendRedirect(redirect);
 		}
 		try {
 			doCheckout(request, response);
 		} catch (Exception e) {
-			SessionMessages.add(request, ShoppingCartPortletConstants.ERROR_MESSAGE_CHECKOUT);
+			SessionErrors.add(request, ShoppingCartPortletConstants.ERROR_MESSAGE_CHECKOUT);
 			logger.error(e.getMessage());
 		}
-		String redirect = ParamUtil.getString(request, WebKeys.REDIRECT);
+		
 		response.sendRedirect(redirect);
 	}
 	
-	private void doCheckout(ActionRequest request, ActionResponse response)
-			throws SystemException {
-		SessionMessages.add(request, PortalUtil.getPortletId(request) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
-		SessionMessages.add(request, PortalUtil.getPortletId(request) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
+	private void doCheckout(ActionRequest request, ActionResponse response) throws Exception{
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		ShoppingOrder activeShoppingOrder = null;
+		List<String> orderItemsIdsList = null;
 		
 		if (themeDisplay.isSignedIn()) {
 			activeShoppingOrder = ShoppingOrderLocalServiceUtil.getUserActiveOrder(
@@ -204,14 +223,12 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			if (null == orderItemsList || orderItemsList.isEmpty())
 				return;
 		} else {
-			List<String> orderItemsIdsList = getOrderItemsIdsFromSession(request);
+			orderItemsIdsList = getOrderItemsIdsFromSession(request);
 			if (null != orderItemsIdsList) {
 				activeShoppingOrder = ShoppingOrderLocalServiceUtil.createOrder(CounterLocalServiceUtil.increment(ShoppingOrderItem.class.getName()));
 				activeShoppingOrder.setUserId(-1l);
 				activeShoppingOrder.setUserName(RoleConstants.GUEST);
-				saveOrderItemsByProductId(orderItemsIdsList, activeShoppingOrder, themeDisplay);
 			}
-			removeOrderItemsIdsFromSession(request);
 		}
 		activeShoppingOrder.setCustomerName(ParamUtil.getString(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_NAME));
 		activeShoppingOrder.setCustomerEmail(ParamUtil.getString(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_EMAIL));
@@ -222,33 +239,16 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		activeShoppingOrder.setShippingPostalCode(ParamUtil.getString(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_POSTAL_CODE));
 		activeShoppingOrder.setShippingCountry(ParamUtil.getString(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_COUNTRY));
 		activeShoppingOrder.setCustomerPhone(ParamUtil.getString(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_PHONE));
-		activeShoppingOrder.setOrderStatus(OrderStatusEnum.PLACED.toString());
-		ShoppingOrderLocalServiceUtil.updateOrder(activeShoppingOrder);
-		sendNotifications(request, response, activeShoppingOrder);
-
+		ShoppingCartPrefsBean cartPrefsBean = new ShoppingCartPrefsBean(request);
+		Message customerMessage = getNotificationMessage(themeDisplay, activeShoppingOrder, orderItemsIdsList, cartPrefsBean, NotificationConstants.CUSTOMER_NOTIFICATION);
+		Message storeMessage = getNotificationMessage(themeDisplay, activeShoppingOrder, orderItemsIdsList, cartPrefsBean, NotificationConstants.STORE_NOTIFICATION);
+		ShoppingOrderLocalServiceUtil.placeOrder(activeShoppingOrder, new Message[]{customerMessage, storeMessage}, orderItemsIdsList);
+		removeOrderItemsIdsFromSession(request);
 		SessionMessages.add(request, ShoppingCartPortletConstants.SUCCESS_MESSAGE_CHECKOUT);
 	}
-
-	private void sendNotifications(PortletRequest request, PortletResponse response, ShoppingOrder shoppingOrder) {
-		ShoppingCartPrefsBean cartPrefsBean = new ShoppingCartPrefsBean(request);
-		try {
-			sendNotification(request, response, shoppingOrder, cartPrefsBean, NotificationConstants.CUSTOMER_NOTIFICATION);
-		} catch (Exception e) {
-			logger.error(String.format(ERROR_SENDING_CUSTOMER_NOTIF, 
-					shoppingOrder.getCustomerEmail(), 
-					shoppingOrder.getOrderId(), e.getMessage()));
-		}
-		try {
-			sendNotification(request, response, shoppingOrder, cartPrefsBean, NotificationConstants.STORE_NOTIFICATION);
-		} catch (Exception e) {
-			logger.error(String.format(ERROR_SENDING_STORE_NOTIF,
-					shoppingOrder.getCustomerEmail(),
-					shoppingOrder.getOrderId(), e.getMessage()));
-		}
-	}
-
-	private void sendNotification(PortletRequest request, PortletResponse response, ShoppingOrder shoppingOrder, ShoppingCartPrefsBean cartPrefsBean, String notificationType) throws Exception {
-		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+	
+	private Message getNotificationMessage(ThemeDisplay themeDisplay, ShoppingOrder shoppingOrder, List<String> cartItemsProductIdList, 
+			ShoppingCartPrefsBean cartPrefsBean, String notificationType) throws Exception {
 		Message message = new Message();
 		message.put(NotificationConstants.CMD, notificationType);
 		message.put(NotificationConstants.STORE_EMAIL, cartPrefsBean.getStoreEmail());
@@ -260,7 +260,8 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		message.put(NotificationConstants.PORTAL_LOGO, getPortalLogo(themeDisplay));
 		message.put(NotificationConstants.DATE, DateUtil.getDate(new Date(), DATE_FORMAT, Locale.US));
 
-		List<ShoppingCartItem> shoppingCartItems = getCartItems(shoppingOrder.getOrderId(), themeDisplay);
+		List<ShoppingCartItem> shoppingCartItems = 
+				(themeDisplay.isSignedIn() ? getCartItems(shoppingOrder.getOrderId(), themeDisplay) : getCartItemsByProductId(cartItemsProductIdList, themeDisplay));
 		if (null != shoppingCartItems) {
 			message.put(NotificationConstants.SHOPPING_ORDER_ITEMS, shoppingCartItems);
 			long orderTotal = 0l;
@@ -278,7 +279,24 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			message.put(NotificationConstants.BODY_TEMPLATE, cartPrefsBean.getCustomerNotifBodyTemplate());
 			message.put(NotificationConstants.SUBJECT_TEMPLATE, cartPrefsBean.getCustomerNotifSubjectTemplate());
 		}
-		EmailNotificationUtil.sendEmailNotification(message);
+		return message;
+	}
+	
+	private boolean validateCheckoutInfo(ActionRequest request){
+		boolean valid = true;
+		String name = ParamUtil.getString(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_NAME);
+		String email = ParamUtil.getString(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_EMAIL);
+		String address1 = ParamUtil.getString(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_ADDRESS_1);
+		String city = ParamUtil.getString(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_CITY);
+		String stateProvince = ParamUtil.getString(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_STATE_PROVINCE);
+		if ((name == null || name.isEmpty())
+				|| (email == null || email.isEmpty())
+				|| (address1 == null || address1.isEmpty())
+				|| (city == null || city.isEmpty())
+				|| (stateProvince == null || stateProvince.isEmpty())) {
+			valid = false;
+		}
+		return valid;
 	}
 
 	private void updateCartItem(ResourceRequest request, ResourceResponse response) {
@@ -412,7 +430,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 						themeDisplay.getCompanyGroupId(),
 						themeDisplay.getCompanyId(),
 						Boolean.TRUE);
-				saveOrderItemsByProductId(itemsIdsList, activeShoppingOrder, themeDisplay);
+				ShoppingOrderItemLocalServiceUtil.saveOrderItemsByProductId(itemsIdsList, activeShoppingOrder);
 			}
 		} else {
 			logger.warn(String.format(ERROR_ITEM_ID_NOT_VALID_LOG, itemId,
@@ -516,43 +534,6 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		}
 		printJsonResponse(jsonResponse.toString(), null, response);
 	}
-
-
-	private void saveOrderItem(String productId, long orderId) throws SystemException {
-		ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil
-				.createOrderItem(CounterLocalServiceUtil
-						.increment(ShoppingOrderItem.class.getName()));
-		shoppingOrderItem.setOrderId(orderId);
-		shoppingOrderItem.setQuantity(1);
-		shoppingOrderItem.setProductId(productId);
-		shoppingOrderItem.setCreateDate(DateUtil.newDate());
-		shoppingOrderItem.setModifiedDate(DateUtil.newDate());
-		ShoppingOrderItemLocalServiceUtil.updateOrderItem(shoppingOrderItem);
-	}
-
-	private void saveOrderItemsByProductId(List<String> productIdsList,
-			ShoppingOrder shoppingOrder, ThemeDisplay themeDisplay) {
-		for (String itemToAdd : productIdsList) {
-			try {
-				ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil
-						.findByOrderAndProductId(shoppingOrder.getOrderId(),
-								itemToAdd);
-				if (null == shoppingOrderItem) {
-					// meaning that there is db record for that item
-					saveOrderItem(itemToAdd, shoppingOrder.getOrderId());
-				} else {
-					// increase the count for that item and updates it
-					shoppingOrderItem.setQuantity(shoppingOrderItem
-							.getQuantity() + 1);
-					ShoppingOrderItemLocalServiceUtil
-							.updateShoppingOrderItem(shoppingOrderItem);
-				}
-			} catch (SystemException e) {
-				logger.error(String.format(ERROR_SAVING_CART_ITEM, itemToAdd,
-						e.getMessage()));
-			}
-		}
-	}
 	
 	/*
      * 
@@ -617,6 +598,20 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				+ VIEW_PAGE_PATH + shoppingCartItem.getProductId());
 	}
 	
+	private List<ShoppingCartItem> getCartItemsByProductId(List<String>productsIdList, ThemeDisplay themeDisplay){
+		List<ShoppingCartItem> shoppingCartItemsList = null;
+		if(null != productsIdList && null != themeDisplay){
+			shoppingCartItemsList = new ArrayList<ShoppingCartItem>();
+			for(String itemProductId : productsIdList){
+				ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+				shoppingCartItem.setProductId(itemProductId);
+				setCartItemDetails(itemProductId, themeDisplay, shoppingCartItem);
+				shoppingCartItemsList.add(shoppingCartItem);
+			}
+		}
+		return shoppingCartItemsList;
+	}
+	
 	private List<String> getOrderItemsIdsFromSession(PortletRequest request) {
 		List<String> orderItemsIdsList = null;
 		PortletSession portletSession = request.getPortletSession();
@@ -677,6 +672,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				+ themeDisplay.getLayoutSet().getLogoId();
 	}
 
+	
 	private static final Log logger = LogFactoryUtil.getLog(ShoppingCartPortlet.class);
 	
 	// Error response messages
@@ -687,14 +683,13 @@ public class ShoppingCartPortlet extends MVCPortlet {
 	private static final String ERROR_ITEM_ID_NOT_VALID_MESSAGE = "The specified itemId is not valid.";
 	private static final String ERROR_BAD_PARAMETER_VALUE = "Bad value for parameter: %S.";
 	private static final String ERROR_SERVING_RESOURCE = "Error while serving resource. Command: %S. %S";
-	private static final String ERROR_SENDING_CUSTOMER_NOTIF = "Error while sending a notification to a customer. Customer email: %S. Order ID: %S. %S";
-	private static final String ERROR_SENDING_STORE_NOTIF = "Error while sending a notification to the store. Customer email: %S. Order ID: %S. %S";
 	// Log messages
 	private static final String ERROR_ADDING_ITEM_TO_CART_LOG = "Error while adding an item with id %S. %S";
 	private static final String ERROR_REMOVING_ITEM_FROM_CART_LOG = "Error while removing cart item with id: %S. %S";
 	private static final String ERROR_UPDATING_CART_ITEM_LOG = "Error while updating cart item with id: %S. %S";
-	private static final String ERROR_SAVING_CART_ITEM = "Error saving order item with id: %S. %S";
 	private static final String ERROR_ITEM_ID_NOT_VALID_LOG = "The item id with id %S was not found.";
+	private static final String ERROR_CHECKING_PORTLET_CONFIG = "Error while checking the portlet configuration. %S";
+	private static final String ERROR_CHECKOUT_MISSING_PORTLET_CONFIG = "\n PORTLET CONFIGURATION IS NOT COMPLETE. Some information in the portlet configuration is missing. \n";
 	
 	private static final String WEB_PAGE_PATH = "/web";
 	private static final String VIEW_PAGE_PATH = "/view?id=";
