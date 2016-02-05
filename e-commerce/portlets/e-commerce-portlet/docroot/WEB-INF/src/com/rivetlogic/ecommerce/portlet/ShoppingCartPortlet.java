@@ -54,6 +54,7 @@ import com.rivetlogic.ecommerce.service.ShoppingOrderLocalServiceUtil;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -264,12 +265,12 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				(themeDisplay.isSignedIn() ? getCartItems(shoppingOrder.getOrderId(), themeDisplay) : getCartItemsByProductId(cartItemsProductIdList, themeDisplay));
 		if (null != shoppingCartItems) {
 			message.put(NotificationConstants.SHOPPING_ORDER_ITEMS, shoppingCartItems);
-			long orderTotal = 0l;
+			double orderTotal = 0l;
 			for (ShoppingCartItem shoppingCartItem : shoppingCartItems) {
-				orderTotal += Long.valueOf(shoppingCartItem.getPrice())
-						* (long) shoppingCartItem.getCount();
+				orderTotal += Float.valueOf(shoppingCartItem.getPrice())
+						* (float) shoppingCartItem.getCount();
 			}
-			message.put(NotificationConstants.ORDER_TOTAL, orderTotal);
+			message.put(NotificationConstants.ORDER_TOTAL, new DecimalFormat("0.00").format(orderTotal));
 		}
 
 		if (NotificationConstants.STORE_NOTIFICATION.equals(notificationType)) {
@@ -487,7 +488,8 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				}
 			}
 		}
-		long total = 0, itemTotal = 0;
+		double total = 0;
+		float itemTotal = 0;
 		int quantity = 0, itemQuantity = 0;
 		for (Entry<String, Integer> mapEntry : cartItemsCountMap.entrySet()) {
 			Document document = getItemContent(mapEntry.getKey(),
@@ -497,27 +499,28 @@ public class ShoppingCartPortlet extends MVCPortlet {
 						.selectSingleNode(ShoppingCartItem.LIST_PRICE);
 				Node itemSalePriceNode = document
 						.selectSingleNode(ShoppingCartItem.SALE_PRICE);
-				Long salePrice = !itemSalePriceNode.getStringValue().isEmpty() ? Long
+				Float salePrice = !itemSalePriceNode.getStringValue().isEmpty() ? Float
 						.valueOf(itemSalePriceNode.getStringValue()) : 0;
-				Long listPrice = !itemListPriceNode.getStringValue().isEmpty() ? Long
+				Float listPrice = !itemListPriceNode.getStringValue().isEmpty() ? Float
 						.valueOf(itemListPriceNode.getStringValue()) : 0;
 				total += (salePrice != 0 ? salePrice
-						* (long) mapEntry.getValue() : listPrice
-						* (long) mapEntry.getValue());
+						* (float) mapEntry.getValue() : listPrice
+						* (float) mapEntry.getValue());
 				quantity += mapEntry.getValue();
 				if (returnItemDetails
 						&& itemToDetailProductId.equals(mapEntry.getKey())) {
 					itemQuantity = mapEntry.getValue();
 					itemTotal = (salePrice != 0 ? salePrice
-							* (long) mapEntry.getValue() : listPrice
-							* (long) mapEntry.getValue());
+							* (float) mapEntry.getValue() : listPrice
+							* (float) mapEntry.getValue());
 				}
 			}
 		}
+		DecimalFormat totalFormat = new DecimalFormat("0.00");
 		JSONObject jsonResponse = JSONFactoryUtil.createJSONObject();
 		JSONObject cartDetailsJson = JSONFactoryUtil.createJSONObject();
 		cartDetailsJson.put(ShoppingCartPortletConstants.CART_DETAILS_TOTAL,
-				total);
+				totalFormat.format(total));
 		cartDetailsJson.put(ShoppingCartPortletConstants.CART_DETAILS_QUANTITY,
 				quantity);
 		jsonResponse.put(ShoppingCartPortletConstants.CART_DETAILS,
@@ -525,7 +528,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		if (returnItemDetails) {
 			JSONObject itemDetailsJson = JSONFactoryUtil.createJSONObject();
 			itemDetailsJson.put(
-					ShoppingCartPortletConstants.CART_DETAILS_TOTAL, itemTotal);
+					ShoppingCartPortletConstants.CART_DETAILS_TOTAL, totalFormat.format(itemTotal));
 			itemDetailsJson.put(
 					ShoppingCartPortletConstants.CART_DETAILS_QUANTITY,
 					itemQuantity);

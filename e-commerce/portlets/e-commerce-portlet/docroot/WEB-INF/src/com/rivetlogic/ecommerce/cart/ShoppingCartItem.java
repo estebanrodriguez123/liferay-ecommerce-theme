@@ -16,6 +16,8 @@
 
 package com.rivetlogic.ecommerce.cart;
 
+import java.text.DecimalFormat;
+
 /**
  * @author isaiulate
  */
@@ -80,7 +82,8 @@ public class ShoppingCartItem {
 	}
 
 	public String getSalePrice() {
-		return salePrice;
+		Double price = Double.valueOf(salePrice);
+		return new DecimalFormat("0.00").format(price);
 	}
 
 	public void setSalePrice(String salePrice) {
@@ -88,7 +91,8 @@ public class ShoppingCartItem {
 	}
 
 	public String getListPrice() {
-		return listPrice;
+		Double price = Double.valueOf(listPrice);
+		return new DecimalFormat("0.00").format(price);
 	}
 
 	public void setListPrice(String listPrice) {
@@ -104,8 +108,9 @@ public class ShoppingCartItem {
 	}
 	
 	public String getPrice(){
-		if(null != salePrice && !salePrice.isEmpty())
+		if(null != salePrice && !salePrice.isEmpty()){
 			return getSalePrice();
+		}
 		return getListPrice();
 	}
 	
@@ -125,8 +130,8 @@ public class ShoppingCartItem {
 		this.itemImage = itemImage;
 	}
 
-	public Long getTotalPrice(){
-		return Long.valueOf(getPrice()) * (long)getCount();
+	public Float getTotalPrice(){
+		return Float.valueOf(getPrice()) * (float)getCount();
 	}
 	
 	public static final String LIST_PRICE = "/root/dynamic-element[@name='listPrice']/dynamic-content";

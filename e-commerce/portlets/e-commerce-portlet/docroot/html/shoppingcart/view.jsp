@@ -27,6 +27,7 @@ List<ShoppingCartItem>cartItemsIdsList = (List<ShoppingCartItem>) request.getAtt
 String checkoutSuccessMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CHECKOUT_SUCCESS_MESSAGE, StringPool.BLANK));
 String checkoutErrorMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CHECKOUT_ERROR_MESSAGE, StringPool.BLANK));
 String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CART_EMPTY_MESSAGE, StringPool.BLANK));
+DecimalFormat decimalFormat = new DecimalFormat("0.00");
 %>
 
 	<portlet:actionURL name="checkout" var="checkoutURL">
@@ -56,7 +57,7 @@ String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(Pre
                         		<th>Quantity</th>
                         		<th>Total</th>
                         	</tr>
-                        	<% Long cartTotalPrice = 0l; %>
+                        	<% Double cartTotalPrice = 0d; %>
 							<%
 								for(ShoppingCartItem orderItem : cartItemsIdsList){		
 							%>
@@ -85,7 +86,7 @@ String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(Pre
                         				</div>
                         			</div>
                         		</td>
-                        		<td class="span1 item-total-price">$<%= orderItem.getTotalPrice() %></td>
+                        		<td class="span1 item-total-price">$<%= decimalFormat.format(orderItem.getTotalPrice())  %></td>
                         		<% cartTotalPrice += orderItem.getTotalPrice(); %>
                         	</tr>
 						<%
@@ -93,7 +94,7 @@ String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(Pre
 						%>
 						<tr>
 							<th colspan="4"></th>
-							<th id="cart-total-price">$<%= cartTotalPrice %></th>
+							<th id="cart-total-price">$<%= decimalFormat.format(cartTotalPrice) %></th>
 						</tr>
                         </tbody></table>
                         <% } %>
