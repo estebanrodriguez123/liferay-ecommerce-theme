@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Rivet Logic Corporation.
+ * Copyright (C) 2005-2016 Rivet Logic Corporation.
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -11,7 +11,8 @@
  * details.
  * 
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, see <http://www.gnu.org/licenses/>.
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 package com.rivetlogic.ecommerce.portlet;
@@ -270,7 +271,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				orderTotal += Float.valueOf(shoppingCartItem.getPrice())
 						* (float) shoppingCartItem.getCount();
 			}
-			message.put(NotificationConstants.ORDER_TOTAL, new DecimalFormat("0.00").format(orderTotal));
+			message.put(NotificationConstants.ORDER_TOTAL, new DecimalFormat(ShoppingCartPortletConstants.DECIMAL_FORMAT).format(orderTotal));
 		}
 
 		if (NotificationConstants.STORE_NOTIFICATION.equals(notificationType)) {
@@ -516,7 +517,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 				}
 			}
 		}
-		DecimalFormat totalFormat = new DecimalFormat("0.00");
+		DecimalFormat totalFormat = new DecimalFormat(ShoppingCartPortletConstants.DECIMAL_FORMAT);
 		JSONObject jsonResponse = JSONFactoryUtil.createJSONObject();
 		JSONObject cartDetailsJson = JSONFactoryUtil.createJSONObject();
 		cartDetailsJson.put(ShoppingCartPortletConstants.CART_DETAILS_TOTAL,

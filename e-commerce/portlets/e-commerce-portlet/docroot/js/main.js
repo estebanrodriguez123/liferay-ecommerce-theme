@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Rivet Logic Corporation.
+ * Copyright (C) 2005-2016 Rivet Logic Corporation.
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -11,7 +11,8 @@
  * details.
  * 
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, see <http://www.gnu.org/licenses/>.
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 AUI.add('shopping-cart', function(A, NAME) {
@@ -42,9 +43,7 @@ AUI.add('shopping-cart', function(A, NAME) {
                 		A.one('#cart_badge').setAttribute('style', 'display:"none"');
                 	}
                 },
-                error: function(event, id, obj){
-                	console.log('ERROR REMOVING CART ITEM');
-                }
+                error: function(event, id, obj){}
             }
         });
     };

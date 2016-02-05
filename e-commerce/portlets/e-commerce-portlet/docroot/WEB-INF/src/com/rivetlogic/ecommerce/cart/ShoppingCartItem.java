@@ -1,5 +1,6 @@
+
 /**
- * Copyright (C) 2016 Rivet Logic Corporation.
+ * Copyright (C) 2005-2016 Rivet Logic Corporation.
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -11,10 +12,13 @@
  * details.
  * 
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, see <http://www.gnu.org/licenses/>.
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 package com.rivetlogic.ecommerce.cart;
+
+import com.rivetlogic.ecommerce.portlet.ShoppingCartPortletConstants;
 
 import java.text.DecimalFormat;
 
@@ -83,7 +87,7 @@ public class ShoppingCartItem {
 
 	public String getSalePrice() {
 		Double price = Double.valueOf(salePrice);
-		return new DecimalFormat("0.00").format(price);
+		return new DecimalFormat(ShoppingCartPortletConstants.DECIMAL_FORMAT).format(price);
 	}
 
 	public void setSalePrice(String salePrice) {
@@ -92,7 +96,7 @@ public class ShoppingCartItem {
 
 	public String getListPrice() {
 		Double price = Double.valueOf(listPrice);
-		return new DecimalFormat("0.00").format(price);
+		return new DecimalFormat(ShoppingCartPortletConstants.DECIMAL_FORMAT).format(price);
 	}
 
 	public void setListPrice(String listPrice) {
