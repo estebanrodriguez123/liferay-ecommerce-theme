@@ -1,5 +1,6 @@
+
 /**
- * Copyright (C) 2016 Rivet Logic Corporation.
+ * Copyright (C) 2005-2016 Rivet Logic Corporation.
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -11,10 +12,15 @@
  * details.
  * 
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, see <http://www.gnu.org/licenses/>.
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 package com.rivetlogic.ecommerce.cart;
+
+import com.rivetlogic.ecommerce.portlet.ShoppingCartPortletConstants;
+
+import java.text.DecimalFormat;
 
 /**
  * @author isaiulate
@@ -80,7 +86,8 @@ public class ShoppingCartItem {
 	}
 
 	public String getSalePrice() {
-		return salePrice;
+		Double price = Double.valueOf(salePrice);
+		return new DecimalFormat(ShoppingCartPortletConstants.DECIMAL_FORMAT).format(price);
 	}
 
 	public void setSalePrice(String salePrice) {
@@ -88,7 +95,8 @@ public class ShoppingCartItem {
 	}
 
 	public String getListPrice() {
-		return listPrice;
+		Double price = Double.valueOf(listPrice);
+		return new DecimalFormat(ShoppingCartPortletConstants.DECIMAL_FORMAT).format(price);
 	}
 
 	public void setListPrice(String listPrice) {
@@ -104,8 +112,9 @@ public class ShoppingCartItem {
 	}
 	
 	public String getPrice(){
-		if(null != salePrice && !salePrice.isEmpty())
+		if(null != salePrice && !salePrice.isEmpty()){
 			return getSalePrice();
+		}
 		return getListPrice();
 	}
 	
@@ -125,8 +134,8 @@ public class ShoppingCartItem {
 		this.itemImage = itemImage;
 	}
 
-	public Long getTotalPrice(){
-		return Long.valueOf(getPrice()) * (long)getCount();
+	public Float getTotalPrice(){
+		return Float.valueOf(getPrice()) * (float)getCount();
 	}
 	
 	public static final String LIST_PRICE = "/root/dynamic-element[@name='listPrice']/dynamic-content";

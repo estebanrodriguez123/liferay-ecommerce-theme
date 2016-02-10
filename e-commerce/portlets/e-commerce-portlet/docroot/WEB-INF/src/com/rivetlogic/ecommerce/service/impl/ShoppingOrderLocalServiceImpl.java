@@ -1,4 +1,8 @@
 /**
+ * Copyright (C) 2016 Rivet Logic Corporation. All rights reserved.
+ */
+
+/**
  * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of the Liferay Enterprise

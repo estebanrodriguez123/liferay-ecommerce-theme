@@ -1,20 +1,20 @@
+
 <%--
-/** 
-* Copyright (C) 2016 Rivet Logic Corporation. 
-* 
-* This program is free software; you can redistribute it and/or 
-* modify it under the terms of the GNU General Public License 
-* as published by the Free Software Foundation; version 3 
-* of the License. 
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty of 
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
-* GNU General Public License for more details. 
-* 
-* You should have received a copy of the GNU General Public License 
-* along with this program; ff not, see <http://www.gnu.org/licenses/>. 
-*/
+/**
+ * Copyright (C) 2005-2016 Rivet Logic Corporation.
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; version 3 of the License.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ */
 --%>
 
 <%@page import="java.util.logging.Logger"%>
@@ -27,6 +27,7 @@ List<ShoppingCartItem>cartItemsIdsList = (List<ShoppingCartItem>) request.getAtt
 String checkoutSuccessMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CHECKOUT_SUCCESS_MESSAGE, StringPool.BLANK));
 String checkoutErrorMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CHECKOUT_ERROR_MESSAGE, StringPool.BLANK));
 String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CART_EMPTY_MESSAGE, StringPool.BLANK));
+DecimalFormat decimalFormat = new DecimalFormat(ShoppingCartPortletConstants.DECIMAL_FORMAT);
 %>
 
 	<portlet:actionURL name="checkout" var="checkoutURL">
@@ -56,7 +57,7 @@ String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(Pre
                         		<th>Quantity</th>
                         		<th>Total</th>
                         	</tr>
-                        	<% Long cartTotalPrice = 0l; %>
+                        	<% Double cartTotalPrice = 0d; %>
 							<%
 								for(ShoppingCartItem orderItem : cartItemsIdsList){		
 							%>
@@ -85,7 +86,7 @@ String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(Pre
                         				</div>
                         			</div>
                         		</td>
-                        		<td class="span1 item-total-price">$<%= orderItem.getTotalPrice() %></td>
+                        		<td class="span1 item-total-price">$<%= decimalFormat.format(orderItem.getTotalPrice())  %></td>
                         		<% cartTotalPrice += orderItem.getTotalPrice(); %>
                         	</tr>
 						<%
@@ -93,7 +94,7 @@ String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(Pre
 						%>
 						<tr>
 							<th colspan="4"></th>
-							<th id="cart-total-price">$<%= cartTotalPrice %></th>
+							<th id="cart-total-price">$<%= decimalFormat.format(cartTotalPrice) %></th>
 						</tr>
                         </tbody></table>
                         <% } %>
