@@ -67,10 +67,13 @@ body > .container {
 
   /* Message */
   .added_message{
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    height: 20px;
+    width: 160px;
   }
+
   .added_message p{
     margin: 0;
   }
@@ -92,11 +95,29 @@ body > .container {
     max-height:60px;
   }
   .block-content .form-horizontal input {
-    width:97% 
+    width:94% 
   }
   .block-content .form-horizontal select {
     width:100% 
   }
+
+  .item-data-row {
+    input {
+      width: 45px;
+    }
+    .btn-mini {
+      padding: 0 6px !important;
+      font-size: 10.5px !important;
+    }
+
+    @media (max-width: 767px){
+      .btn-mini {
+        width: 59px !important;
+      }
+    }
+  }
+
+
 
   /*LIST ITEMS*/
 
@@ -219,6 +240,10 @@ body > .container {
     display:block;
     overflow:auto;
 
+    @media (max-width: 767px) {
+      overflow: inherit;
+    }
+
     .main-image img {
       height: 380px;
       display: block;
@@ -319,12 +344,21 @@ body > .container {
 
     .thumbnail .caption-size {
       height: 230px;
+      p:first-of-type{
+        height: 120px;
+        -webkit-line-clamp: 6;
+      }
     }
   }
 
   @media (max-width: 979px) and (min-width: 768px) {
     .thumbnail .caption-size {
       height: 250px;
+
+      p:first-of-type{
+          height: 142px;
+          -webkit-line-clamp: 7;
+      }
 
       .item-buttons {
         width: 100%;
@@ -336,6 +370,11 @@ body > .container {
     .thumbnail .caption-size {
       height: 250px;
 
+      p:first-of-type{
+          height: 84px;
+          -webkit-line-clamp: 4;
+      }
+
       .item-buttons {
         width: 95%;
       }
@@ -345,6 +384,13 @@ body > .container {
   .thumbnail .caption-size {
     position: relative;
 
+    p:first-of-type{
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+    }
+
+
     .item-buttons {
       position: absolute;
       bottom: 0;
@@ -353,9 +399,9 @@ body > .container {
 
 
   @media (max-width: 979px) {
-  	#navigation {
-  	    display: block;
-  	}
+    #navigation {
+        display: block;
+    }
   }
 
   #e-com-nav ul li .delete-tab {

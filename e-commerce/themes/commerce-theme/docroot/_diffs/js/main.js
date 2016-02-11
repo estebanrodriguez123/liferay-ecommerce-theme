@@ -1,3 +1,10 @@
+$(function() {
+	// Product View image click
+	$('.side-image').click(function() {
+		var $imageLink = $(this).find('img').data('src');
+		$('.main-image').find('img').attr('src', $imageLink);
+	});
+});
 
 function initCart(link){
 	$.post(link+"?p_p_id=shoppingcart_WAR_ecommerceportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_shoppingcart_WAR_ecommerceportlet_cmd=getCartInfo")
@@ -24,7 +31,7 @@ function createSuccessMessage(element){
 	p.appendChild(message);  
 	div.appendChild(p); 
 	element.append(div); 
-	$(div).fadeOut(1000);
+	$(div).fadeOut(4000);
 }
 
 
