@@ -95,7 +95,7 @@ body > .container {
     max-height:60px;
   }
   .block-content .form-horizontal input {
-    width:97% 
+    width:94% 
   }
   .block-content .form-horizontal select {
     width:100% 
@@ -239,6 +239,10 @@ body > .container {
     min-height: .25em;
     display:block;
     overflow:auto;
+
+    @media (max-width: 767px) {
+      overflow: inherit;
+    }
 
     .main-image img {
       height: 380px;
