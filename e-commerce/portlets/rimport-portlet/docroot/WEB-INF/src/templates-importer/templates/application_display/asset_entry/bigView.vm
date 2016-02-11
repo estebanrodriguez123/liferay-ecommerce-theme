@@ -47,9 +47,9 @@
 
                 #end
                 
-                #if ($validator.isNotNull($salePrice))
-                    #set( $salePrice = $listPrice )
-                 #end
+            ##    #if ($validator.isNotNull($salePrice))
+            ##        #set( $salePrice = $listPrice )
+            ##    #end
 
                 
                 <div class="row-fluid">
