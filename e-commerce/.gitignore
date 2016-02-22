@@ -20,6 +20,10 @@ ext/*-ext/docroot/WEB-INF/ext-util-bridges/*.jar
 ext/*-ext/docroot/WEB-INF/ext-util-java/*.jar
 ext/*-ext/docroot/WEB-INF/ext-util-taglib/*.jar
 portlets/*-portlet/docroot/WEB-INF/tld/*.tld
+themes/*-theme/docroot/css
+themes/*-theme/docroot/images
+themes/*-theme/docroot/js
+themes/*-theme/docroot/templates
 !portlets/*-portlet/docroot/WEB-INF/tld/liferay-portlet-ext.tld
 !portlets/*-portlet/docroot/WEB-INF/tld/liferay-portlet.tld
 !portlets/*-portlet/docroot/WEB-INF/tld/liferay-security.tld

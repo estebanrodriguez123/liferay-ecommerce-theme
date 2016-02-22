@@ -8,7 +8,10 @@
 		<dynamic-content language-id="en_US"><![CDATA[Used Like New]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="productImages" type="document_library" index-type="keyword" index="0">
-		<dynamic-content language-id="en_US" id="17748"><![CDATA[[$FILE=ct1.jpg$]]]></dynamic-content>
+		<dynamic-content language-id="en_US"><![CDATA[[$FILE=ct3.jpg$]]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element name="shortDescription" type="text" index-type="keyword" index="0">
+		<dynamic-content language-id="en_US"><![CDATA[Lorem ipsum dolor sit amet, eu vix delicat]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="longDescription" type="text_area" index-type="keyword" index="0">
 		<dynamic-content language-id="en_US"><![CDATA[<p style="color: rgb(51, 51, 51);">Lorem ipsum dolor sit amet, eu vix delicata iudicabit, vix te dolore interesset signiferumque. Sea putent labore ocurreret an, ei aliquando moderatius nec, ut est perfecto voluptatum. Cu graeci gubergren cum. In pri efficiendi vituperatoribus. Pri tota expetenda ocurreret no, principes philosophia usu id, eu dicit prompta vis.</p>
@@ -167,8 +170,5 @@
 	</dynamic-element>
 	<dynamic-element name="salePrice" type="text" index-type="keyword" index="0">
 		<dynamic-content language-id="en_US"><![CDATA[]]></dynamic-content>
-	</dynamic-element>
-	<dynamic-element name="link" type="text" index-type="keyword" index="0">
-		<dynamic-content language-id="en_US"><![CDATA[http://www.amazon.com/Nintendo-64-Controller-Original-Grey/dp/B000PJHAD6/ref=sr_1_1?s=videogames&ie=UTF8&qid=1443769610&sr=1-1&keywords=n64+controller]]></dynamic-content>
 	</dynamic-element>
 </root>
