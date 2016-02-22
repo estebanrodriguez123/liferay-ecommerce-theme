@@ -23,7 +23,7 @@
 							"emailFromAddress":"test@liferay.com",
 							"paginationType": "simple",
 							"enableFlags": "false",
-							"queryValues0": "Featured Product",
+							"queryValues0": "featured product",
 							"emailAssetEntryAddedEnabled": "false",
 							"classTypeIds": "NULL_VALUE",
 							"anyClassTypeJournalArticleAssetRendererFactory": "true",
