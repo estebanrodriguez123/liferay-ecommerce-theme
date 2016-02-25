@@ -227,7 +227,6 @@
 							"classTypeIdsJournalArticleAssetRendererFactory": "68dc7fb3-c237-4cfe-9447-2dfa46645dc7,548905e1-531d-4b4d-af70-29ed1880ba5b,b1665ff3-d176-442e-9081-13388eadae44,0b69f73c-6c25-43b9-806a-8f55ac1614d9",
 							"showAvailableLocales": "false",
 							"enableViewCountIncrement": "true",
-							"portletSetupUseCustomTitle": "true",
 							"enableRss": "false",
 							"emailFromAddress": "test@liferay.com",
 							"paginationType": "none",

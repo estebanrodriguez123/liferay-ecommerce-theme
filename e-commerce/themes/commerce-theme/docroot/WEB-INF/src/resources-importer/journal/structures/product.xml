@@ -91,7 +91,7 @@
 			</entry>
 		</meta-data>
 	</dynamic-element>
-	<dynamic-element dataType="string" indexType="keyword" localizable="true" name="salePrice" readOnly="false" repeatable="false" required="false" showLabel="true" type="text" width="small">
+	<dynamic-element dataType="number" fieldNamespace="ddm" indexType="keyword" localizable="true" name="salePrice" readOnly="false" repeatable="false" required="false" showLabel="true" type="ddm-number" width="small">
 		<meta-data locale="en_US">
 			<entry name="label">
 				<![CDATA[Sale Price]]>
