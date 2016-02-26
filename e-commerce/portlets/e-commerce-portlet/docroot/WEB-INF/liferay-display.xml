@@ -3,7 +3,7 @@
 
 <display>
 	
-	<category name="category.shopping">
+	<category name="category.hidden">
 		<portlet id="shopping-cart"></portlet>
 	</category>
 </display>
