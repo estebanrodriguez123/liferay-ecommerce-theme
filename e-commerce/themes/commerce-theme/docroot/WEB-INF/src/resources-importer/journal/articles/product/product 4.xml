@@ -168,7 +168,7 @@
 	<dynamic-element name="listPrice" type="ddm-number" index-type="keyword" index="0">
 		<dynamic-content language-id="en_US"><![CDATA[2222]]></dynamic-content>
 	</dynamic-element>
-	<dynamic-element name="salePrice" type="text" index-type="keyword" index="0">
+	<dynamic-element name="salePrice" type="ddm-number" index-type="keyword" index="0">
 		<dynamic-content language-id="en_US"><![CDATA[1111]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="link" type="text" index-type="keyword" index="0">
