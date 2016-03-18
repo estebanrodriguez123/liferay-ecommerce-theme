@@ -39,6 +39,7 @@ public class ShoppingCartPortletConstants {
     
     public static final String SHOPPING_CART_ITEMS = "shoppingCartItems";
     public static final String COOKIE_SHOPPING_CART_ITEMS = "SHOPPING_CART_ITEMS";
+    public static final String COOKIE_SHOPPING_CART_PRICES = "SHOPPING_CART_PRICES";
     
     public static final String CHECKOUT_PARAMETER_NAME = "name";
     public static final String CHECKOUT_PARAMETER_EMAIL = "email";

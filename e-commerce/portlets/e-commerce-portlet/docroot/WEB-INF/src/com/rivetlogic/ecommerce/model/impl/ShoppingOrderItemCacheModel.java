@@ -38,7 +38,7 @@ public class ShoppingOrderItemCacheModel implements CacheModel<ShoppingOrderItem
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(15);
 
 		sb.append("{itemId=");
 		sb.append(itemId);
@@ -52,6 +52,8 @@ public class ShoppingOrderItemCacheModel implements CacheModel<ShoppingOrderItem
 		sb.append(orderId);
 		sb.append(", quantity=");
 		sb.append(quantity);
+		sb.append(", price=");
+		sb.append(price);
 		sb.append("}");
 
 		return sb.toString();
@@ -86,6 +88,7 @@ public class ShoppingOrderItemCacheModel implements CacheModel<ShoppingOrderItem
 
 		shoppingOrderItemImpl.setOrderId(orderId);
 		shoppingOrderItemImpl.setQuantity(quantity);
+		shoppingOrderItemImpl.setPrice(price);
 
 		shoppingOrderItemImpl.resetOriginalValues();
 
@@ -100,6 +103,7 @@ public class ShoppingOrderItemCacheModel implements CacheModel<ShoppingOrderItem
 		productId = objectInput.readUTF();
 		orderId = objectInput.readLong();
 		quantity = objectInput.readInt();
+		price = objectInput.readDouble();
 	}
 
 	@Override
@@ -118,6 +122,7 @@ public class ShoppingOrderItemCacheModel implements CacheModel<ShoppingOrderItem
 
 		objectOutput.writeLong(orderId);
 		objectOutput.writeInt(quantity);
+		objectOutput.writeDouble(price);
 	}
 
 	public long itemId;
@@ -126,4 +131,5 @@ public class ShoppingOrderItemCacheModel implements CacheModel<ShoppingOrderItem
 	public String productId;
 	public long orderId;
 	public int quantity;
+	public double price;
 }

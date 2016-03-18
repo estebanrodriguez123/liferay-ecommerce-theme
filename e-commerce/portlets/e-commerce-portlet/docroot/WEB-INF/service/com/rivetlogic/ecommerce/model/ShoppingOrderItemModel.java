@@ -144,6 +144,20 @@ public interface ShoppingOrderItemModel extends BaseModel<ShoppingOrderItem> {
 	 */
 	public void setQuantity(int quantity);
 
+	/**
+	 * Returns the price of this Shopping Order Item.
+	 *
+	 * @return the price of this Shopping Order Item
+	 */
+	public double getPrice();
+
+	/**
+	 * Sets the price of this Shopping Order Item.
+	 *
+	 * @param price the price of this Shopping Order Item
+	 */
+	public void setPrice(double price);
+
 	@Override
 	public boolean isNew();
 
@@ -181,20 +195,19 @@ public interface ShoppingOrderItemModel extends BaseModel<ShoppingOrderItem> {
 	public Object clone();
 
 	@Override
-	public int compareTo(
-		com.rivetlogic.ecommerce.model.ShoppingOrderItem shoppingOrderItem);
+	public int compareTo(ShoppingOrderItem shoppingOrderItem);
 
 	@Override
 	public int hashCode();
 
 	@Override
-	public CacheModel<com.rivetlogic.ecommerce.model.ShoppingOrderItem> toCacheModel();
+	public CacheModel<ShoppingOrderItem> toCacheModel();
 
 	@Override
-	public com.rivetlogic.ecommerce.model.ShoppingOrderItem toEscapedModel();
+	public ShoppingOrderItem toEscapedModel();
 
 	@Override
-	public com.rivetlogic.ecommerce.model.ShoppingOrderItem toUnescapedModel();
+	public ShoppingOrderItem toUnescapedModel();
 
 	@Override
 	public String toString();

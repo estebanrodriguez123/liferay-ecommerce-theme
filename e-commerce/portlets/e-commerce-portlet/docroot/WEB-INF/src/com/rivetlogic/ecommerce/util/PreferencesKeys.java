@@ -30,6 +30,10 @@ public class PreferencesKeys {
 	public static final String CHECKOUT_ERROR_MESSAGE = "checkoutErrorMessage";
 	public static final String CART_EMPTY_MESSAGE = "cartEmptyMessage";
 	
+	public static final String ENABLE_PAYPAL = "enablePaypal";
+	public static final String PAYPAL_EMAIL = "paypalEmail";
+	
+	
 	public static final String CHANGED = "changed";
 	
 	public static final String DEFAULT_STORE_EMAIL_SUBJECT = "default.store.email.subject";

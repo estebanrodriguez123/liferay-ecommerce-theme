@@ -954,6 +954,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 		shoppingOrderImpl.setShippingPostalCode(shoppingOrder.getShippingPostalCode());
 		shoppingOrderImpl.setShippingStateProvince(shoppingOrder.getShippingStateProvince());
 		shoppingOrderImpl.setShippingCountry(shoppingOrder.getShippingCountry());
+		shoppingOrderImpl.setTotal(shoppingOrder.getTotal());
 
 		return shoppingOrderImpl;
 	}

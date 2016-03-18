@@ -132,10 +132,30 @@ public class ShoppingOrderItemLocalServiceClpInvoker {
 				"com.rivetlogic.ecommerce.model.ShoppingOrderItem"
 			};
 
-		_methodName47 = "saveOrderItemsByProductId";
+		_methodName47 = "saveOrderItem";
 
 		_methodParameterTypes47 = new String[] {
+				"java.lang.String", "long", "float"
+			};
+
+		_methodName48 = "saveOrderItemsByProductId";
+
+		_methodParameterTypes48 = new String[] {
 				"java.util.List", "com.rivetlogic.ecommerce.model.ShoppingOrder"
+			};
+
+		_methodName49 = "saveOrderItemsByProductId";
+
+		_methodParameterTypes49 = new String[] {
+				"java.util.List", "com.rivetlogic.ecommerce.model.ShoppingOrder",
+				"java.util.Map"
+			};
+
+		_methodName50 = "saveOrderItemByProductId";
+
+		_methodParameterTypes50 = new String[] {
+				"java.lang.String",
+				"com.rivetlogic.ecommerce.model.ShoppingOrder", "float"
 			};
 	}
 
@@ -263,8 +283,35 @@ public class ShoppingOrderItemLocalServiceClpInvoker {
 
 		if (_methodName47.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
+			ShoppingOrderItemLocalServiceUtil.saveOrderItem((java.lang.String)arguments[0],
+				((Long)arguments[1]).longValue(),
+				((Float)arguments[2]).floatValue());
+
+			return null;
+		}
+
+		if (_methodName48.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
 			ShoppingOrderItemLocalServiceUtil.saveOrderItemsByProductId((java.util.List<java.lang.String>)arguments[0],
 				(com.rivetlogic.ecommerce.model.ShoppingOrder)arguments[1]);
+
+			return null;
+		}
+
+		if (_methodName49.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
+			ShoppingOrderItemLocalServiceUtil.saveOrderItemsByProductId((java.util.List<java.lang.String>)arguments[0],
+				(com.rivetlogic.ecommerce.model.ShoppingOrder)arguments[1],
+				(java.util.Map<java.lang.String, java.lang.Float>)arguments[2]);
+
+			return null;
+		}
+
+		if (_methodName50.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
+			ShoppingOrderItemLocalServiceUtil.saveOrderItemByProductId((java.lang.String)arguments[0],
+				(com.rivetlogic.ecommerce.model.ShoppingOrder)arguments[1],
+				((Float)arguments[2]).floatValue());
 
 			return null;
 		}
@@ -318,4 +365,10 @@ public class ShoppingOrderItemLocalServiceClpInvoker {
 	private String[] _methodParameterTypes45;
 	private String _methodName47;
 	private String[] _methodParameterTypes47;
+	private String _methodName48;
+	private String[] _methodParameterTypes48;
+	private String _methodName49;
+	private String[] _methodParameterTypes49;
+	private String _methodName50;
+	private String[] _methodParameterTypes50;
 }

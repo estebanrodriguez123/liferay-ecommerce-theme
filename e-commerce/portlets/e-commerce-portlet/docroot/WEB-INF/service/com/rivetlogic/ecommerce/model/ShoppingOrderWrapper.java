@@ -67,6 +67,7 @@ public class ShoppingOrderWrapper implements ShoppingOrder,
 		attributes.put("shippingPostalCode", getShippingPostalCode());
 		attributes.put("shippingStateProvince", getShippingStateProvince());
 		attributes.put("shippingCountry", getShippingCountry());
+		attributes.put("total", getTotal());
 
 		return attributes;
 	}
@@ -174,6 +175,12 @@ public class ShoppingOrderWrapper implements ShoppingOrder,
 
 		if (shippingCountry != null) {
 			setShippingCountry(shippingCountry);
+		}
+
+		Double total = (Double)attributes.get("total");
+
+		if (total != null) {
+			setTotal(total);
 		}
 	}
 
@@ -557,6 +564,26 @@ public class ShoppingOrderWrapper implements ShoppingOrder,
 	@Override
 	public void setShippingCountry(java.lang.String shippingCountry) {
 		_shoppingOrder.setShippingCountry(shippingCountry);
+	}
+
+	/**
+	* Returns the total of this Shopping Order.
+	*
+	* @return the total of this Shopping Order
+	*/
+	@Override
+	public double getTotal() {
+		return _shoppingOrder.getTotal();
+	}
+
+	/**
+	* Sets the total of this Shopping Order.
+	*
+	* @param total the total of this Shopping Order
+	*/
+	@Override
+	public void setTotal(double total) {
+		_shoppingOrder.setTotal(total);
 	}
 
 	@Override

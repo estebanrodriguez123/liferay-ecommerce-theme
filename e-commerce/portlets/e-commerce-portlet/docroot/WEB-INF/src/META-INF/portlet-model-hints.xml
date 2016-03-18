@@ -19,6 +19,7 @@
 		<field name="shippingPostalCode" type="String" />
 		<field name="shippingStateProvince" type="String" />
 		<field name="shippingCountry" type="String" />
+		<field name="total" type="double" />
 	</model>
 	<model name="com.rivetlogic.ecommerce.model.ShoppingOrderItem">
 		<field name="itemId" type="long" />
@@ -27,5 +28,6 @@
 		<field name="productId" type="String" />
 		<field name="orderId" type="long" />
 		<field name="quantity" type="int" />
+		<field name="price" type="double" />
 	</model>
 </model-hints>

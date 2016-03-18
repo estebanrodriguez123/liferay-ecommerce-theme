@@ -134,7 +134,7 @@ public class ShoppingOrderLocalServiceClp implements ShoppingOrderLocalService {
 		_methodParameterTypes22 = new String[] {
 				"com.rivetlogic.ecommerce.model.ShoppingOrder",
 				"com.liferay.portal.kernel.messaging.Message[][]",
-				"java.util.List"
+				"java.util.List", "java.util.Map", "boolean"
 			};
 
 		_methodName23 = "createOrder";
@@ -790,7 +790,9 @@ public class ShoppingOrderLocalServiceClp implements ShoppingOrderLocalService {
 	public void placeOrder(
 		com.rivetlogic.ecommerce.model.ShoppingOrder shoppingOrder,
 		com.liferay.portal.kernel.messaging.Message[] notifMessages,
-		java.util.List<java.lang.String> orderItemsProductIdsList)
+		java.util.List<java.lang.String> orderItemsProductIdsList,
+		java.util.Map<java.lang.String, java.lang.Float> prices,
+		boolean paypalEnabled)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
 			_invokableLocalService.invokeMethod(_methodName22,
@@ -800,7 +802,11 @@ public class ShoppingOrderLocalServiceClp implements ShoppingOrderLocalService {
 					
 				ClpSerializer.translateInput(notifMessages),
 					
-				ClpSerializer.translateInput(orderItemsProductIdsList)
+				ClpSerializer.translateInput(orderItemsProductIdsList),
+					
+				ClpSerializer.translateInput(prices),
+					
+				paypalEnabled
 				});
 		}
 		catch (Throwable t) {

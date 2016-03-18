@@ -340,6 +340,20 @@ public interface ShoppingOrderModel extends BaseModel<ShoppingOrder>,
 	 */
 	public void setShippingCountry(String shippingCountry);
 
+	/**
+	 * Returns the total of this Shopping Order.
+	 *
+	 * @return the total of this Shopping Order
+	 */
+	public double getTotal();
+
+	/**
+	 * Sets the total of this Shopping Order.
+	 *
+	 * @param total the total of this Shopping Order
+	 */
+	public void setTotal(double total);
+
 	@Override
 	public boolean isNew();
 
@@ -377,20 +391,19 @@ public interface ShoppingOrderModel extends BaseModel<ShoppingOrder>,
 	public Object clone();
 
 	@Override
-	public int compareTo(
-		com.rivetlogic.ecommerce.model.ShoppingOrder shoppingOrder);
+	public int compareTo(ShoppingOrder shoppingOrder);
 
 	@Override
 	public int hashCode();
 
 	@Override
-	public CacheModel<com.rivetlogic.ecommerce.model.ShoppingOrder> toCacheModel();
+	public CacheModel<ShoppingOrder> toCacheModel();
 
 	@Override
-	public com.rivetlogic.ecommerce.model.ShoppingOrder toEscapedModel();
+	public ShoppingOrder toEscapedModel();
 
 	@Override
-	public com.rivetlogic.ecommerce.model.ShoppingOrder toUnescapedModel();
+	public ShoppingOrder toUnescapedModel();
 
 	@Override
 	public String toString();

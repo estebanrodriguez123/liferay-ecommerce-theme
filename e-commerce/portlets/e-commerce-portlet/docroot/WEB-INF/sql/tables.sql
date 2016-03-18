@@ -15,7 +15,8 @@ create table rivetlogic_ecommerce_ShoppingOrder (
 	shippingCity VARCHAR(75) null,
 	shippingPostalCode VARCHAR(75) null,
 	shippingStateProvince VARCHAR(75) null,
-	shippingCountry VARCHAR(75) null
+	shippingCountry VARCHAR(75) null,
+	total DOUBLE
 );
 
 create table rivetlogic_ecommerce_ShoppingOrderItem (
@@ -24,5 +25,6 @@ create table rivetlogic_ecommerce_ShoppingOrderItem (
 	modifiedDate DATE null,
 	productId VARCHAR(75) null,
 	orderId LONG,
-	quantity INTEGER
+	quantity INTEGER,
+	price DOUBLE
 );

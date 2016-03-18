@@ -1192,6 +1192,7 @@ public class ShoppingOrderItemPersistenceImpl extends BasePersistenceImpl<Shoppi
 		shoppingOrderItemImpl.setProductId(shoppingOrderItem.getProductId());
 		shoppingOrderItemImpl.setOrderId(shoppingOrderItem.getOrderId());
 		shoppingOrderItemImpl.setQuantity(shoppingOrderItem.getQuantity());
+		shoppingOrderItemImpl.setPrice(shoppingOrderItem.getPrice());
 
 		return shoppingOrderItemImpl;
 	}

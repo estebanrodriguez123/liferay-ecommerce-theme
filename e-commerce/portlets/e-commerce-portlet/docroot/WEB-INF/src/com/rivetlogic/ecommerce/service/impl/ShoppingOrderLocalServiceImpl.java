@@ -31,6 +31,7 @@ import com.rivetlogic.ecommerce.service.persistence.ShoppingOrderUtil;
 import com.rivetlogic.ecommerce.util.OrderStatusEnum;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The implementation of the Shopping Order local service.
@@ -83,11 +84,11 @@ public class ShoppingOrderLocalServiceImpl
 		return updateShoppingOrder(shoppingOrder);
 	}
 	
-	public void placeOrder(ShoppingOrder shoppingOrder, Message notifMessages[], List<String>orderItemsProductIdsList) throws SystemException{
+	public void placeOrder(ShoppingOrder shoppingOrder, Message notifMessages[], List<String>orderItemsProductIdsList, Map<String, Float> prices, boolean paypalEnabled) throws SystemException{
 		shoppingOrder.setOrderStatus(OrderStatusEnum.PLACED.toString());
 		updateOrder(shoppingOrder);
-		ShoppingOrderItemLocalServiceUtil.saveOrderItemsByProductId(orderItemsProductIdsList, shoppingOrder);
-		if(null != notifMessages)
+		ShoppingOrderItemLocalServiceUtil.saveOrderItemsByProductId(orderItemsProductIdsList, shoppingOrder, prices);
+		if(!paypalEnabled && null != notifMessages)
 			for(Message message : notifMessages){
 				EmailNotificationUtil.sendEmailNotification(message);
 			}

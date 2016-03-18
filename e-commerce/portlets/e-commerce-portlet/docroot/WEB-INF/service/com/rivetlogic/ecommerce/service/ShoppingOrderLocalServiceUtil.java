@@ -298,10 +298,13 @@ public class ShoppingOrderLocalServiceUtil {
 	public static void placeOrder(
 		com.rivetlogic.ecommerce.model.ShoppingOrder shoppingOrder,
 		com.liferay.portal.kernel.messaging.Message[] notifMessages,
-		java.util.List<java.lang.String> orderItemsProductIdsList)
+		java.util.List<java.lang.String> orderItemsProductIdsList,
+		java.util.Map<java.lang.String, java.lang.Float> prices,
+		boolean paypalEnabled)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getService()
-			.placeOrder(shoppingOrder, notifMessages, orderItemsProductIdsList);
+			.placeOrder(shoppingOrder, notifMessages, orderItemsProductIdsList,
+			prices, paypalEnabled);
 	}
 
 	public static com.rivetlogic.ecommerce.model.ShoppingOrder createOrder(

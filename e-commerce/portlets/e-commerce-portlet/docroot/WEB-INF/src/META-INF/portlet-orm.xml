@@ -30,6 +30,7 @@
 			<basic name="shippingPostalCode" />
 			<basic name="shippingStateProvince" />
 			<basic name="shippingCountry" />
+			<basic name="total" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
@@ -48,6 +49,7 @@
 			<basic name="productId" />
 			<basic name="orderId" />
 			<basic name="quantity" />
+			<basic name="price" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />

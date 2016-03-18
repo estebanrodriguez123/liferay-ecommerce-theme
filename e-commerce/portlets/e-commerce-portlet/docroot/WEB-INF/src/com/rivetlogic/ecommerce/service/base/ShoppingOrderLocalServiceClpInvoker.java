@@ -133,7 +133,7 @@ public class ShoppingOrderLocalServiceClpInvoker {
 		_methodParameterTypes45 = new String[] {
 				"com.rivetlogic.ecommerce.model.ShoppingOrder",
 				"com.liferay.portal.kernel.messaging.Message[][]",
-				"java.util.List"
+				"java.util.List", "java.util.Map", "boolean"
 			};
 
 		_methodName46 = "createOrder";
@@ -265,7 +265,9 @@ public class ShoppingOrderLocalServiceClpInvoker {
 				Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
 			ShoppingOrderLocalServiceUtil.placeOrder((com.rivetlogic.ecommerce.model.ShoppingOrder)arguments[0],
 				(com.liferay.portal.kernel.messaging.Message[])arguments[1],
-				(java.util.List<java.lang.String>)arguments[2]);
+				(java.util.List<java.lang.String>)arguments[2],
+				(java.util.Map<java.lang.String, java.lang.Float>)arguments[3],
+				((Boolean)arguments[4]).booleanValue());
 
 			return null;
 		}

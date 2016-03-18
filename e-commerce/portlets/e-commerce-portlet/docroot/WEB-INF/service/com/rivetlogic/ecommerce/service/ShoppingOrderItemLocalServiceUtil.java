@@ -297,11 +297,31 @@ public class ShoppingOrderItemLocalServiceUtil {
 		return getService().updateOrderItem(shoppingOrderItem);
 	}
 
+	public static void saveOrderItem(java.lang.String productId, long orderId,
+		float price) throws com.liferay.portal.kernel.exception.SystemException {
+		getService().saveOrderItem(productId, orderId, price);
+	}
+
 	public static void saveOrderItemsByProductId(
 		java.util.List<java.lang.String> productIdsList,
 		com.rivetlogic.ecommerce.model.ShoppingOrder shoppingOrder)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getService().saveOrderItemsByProductId(productIdsList, shoppingOrder);
+	}
+
+	public static void saveOrderItemsByProductId(
+		java.util.List<java.lang.String> productIdsList,
+		com.rivetlogic.ecommerce.model.ShoppingOrder shoppingOrder,
+		java.util.Map<java.lang.String, java.lang.Float> prices)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.saveOrderItemsByProductId(productIdsList, shoppingOrder, prices);
+	}
+
+	public static void saveOrderItemByProductId(java.lang.String productId,
+		com.rivetlogic.ecommerce.model.ShoppingOrder shoppingOrder, float price)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService().saveOrderItemByProductId(productId, shoppingOrder, price);
 	}
 
 	public static void clearService() {

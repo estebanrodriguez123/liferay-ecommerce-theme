@@ -77,9 +77,10 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 			{ "shippingCity", Types.VARCHAR },
 			{ "shippingPostalCode", Types.VARCHAR },
 			{ "shippingStateProvince", Types.VARCHAR },
-			{ "shippingCountry", Types.VARCHAR }
+			{ "shippingCountry", Types.VARCHAR },
+			{ "total", Types.DOUBLE }
 		};
-	public static final String TABLE_SQL_CREATE = "create table rivetlogic_ecommerce_ShoppingOrder (orderId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,orderStatus VARCHAR(75) null,customerEmail VARCHAR(75) null,customerName VARCHAR(75) null,customerPhone VARCHAR(75) null,shippingAddress1 VARCHAR(75) null,shippingAddress2 VARCHAR(75) null,shippingCity VARCHAR(75) null,shippingPostalCode VARCHAR(75) null,shippingStateProvince VARCHAR(75) null,shippingCountry VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table rivetlogic_ecommerce_ShoppingOrder (orderId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,orderStatus VARCHAR(75) null,customerEmail VARCHAR(75) null,customerName VARCHAR(75) null,customerPhone VARCHAR(75) null,shippingAddress1 VARCHAR(75) null,shippingAddress2 VARCHAR(75) null,shippingCity VARCHAR(75) null,shippingPostalCode VARCHAR(75) null,shippingStateProvince VARCHAR(75) null,shippingCountry VARCHAR(75) null,total DOUBLE)";
 	public static final String TABLE_SQL_DROP = "drop table rivetlogic_ecommerce_ShoppingOrder";
 	public static final String ORDER_BY_JPQL = " ORDER BY shoppingOrder.orderId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY rivetlogic_ecommerce_ShoppingOrder.orderId ASC";
@@ -155,6 +156,7 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 		attributes.put("shippingPostalCode", getShippingPostalCode());
 		attributes.put("shippingStateProvince", getShippingStateProvince());
 		attributes.put("shippingCountry", getShippingCountry());
+		attributes.put("total", getTotal());
 
 		return attributes;
 	}
@@ -262,6 +264,12 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 
 		if (shippingCountry != null) {
 			setShippingCountry(shippingCountry);
+		}
+
+		Double total = (Double)attributes.get("total");
+
+		if (total != null) {
+			setTotal(total);
 		}
 	}
 
@@ -522,6 +530,16 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 		_shippingCountry = shippingCountry;
 	}
 
+	@Override
+	public double getTotal() {
+		return _total;
+	}
+
+	@Override
+	public void setTotal(double total) {
+		_total = total;
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -570,6 +588,7 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 		shoppingOrderImpl.setShippingPostalCode(getShippingPostalCode());
 		shoppingOrderImpl.setShippingStateProvince(getShippingStateProvince());
 		shoppingOrderImpl.setShippingCountry(getShippingCountry());
+		shoppingOrderImpl.setTotal(getTotal());
 
 		shoppingOrderImpl.resetOriginalValues();
 
@@ -750,12 +769,14 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 			shoppingOrderCacheModel.shippingCountry = null;
 		}
 
+		shoppingOrderCacheModel.total = getTotal();
+
 		return shoppingOrderCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(35);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("{orderId=");
 		sb.append(getOrderId());
@@ -791,6 +812,8 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 		sb.append(getShippingStateProvince());
 		sb.append(", shippingCountry=");
 		sb.append(getShippingCountry());
+		sb.append(", total=");
+		sb.append(getTotal());
 		sb.append("}");
 
 		return sb.toString();
@@ -798,7 +821,7 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(55);
+		StringBundler sb = new StringBundler(58);
 
 		sb.append("<model><model-name>");
 		sb.append("com.rivetlogic.ecommerce.model.ShoppingOrder");
@@ -872,6 +895,10 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 			"<column><column-name>shippingCountry</column-name><column-value><![CDATA[");
 		sb.append(getShippingCountry());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>total</column-name><column-value><![CDATA[");
+		sb.append(getTotal());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -903,6 +930,7 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 	private String _shippingPostalCode;
 	private String _shippingStateProvince;
 	private String _shippingCountry;
+	private double _total;
 	private long _columnBitmask;
 	private ShoppingOrder _escapedModel;
 }

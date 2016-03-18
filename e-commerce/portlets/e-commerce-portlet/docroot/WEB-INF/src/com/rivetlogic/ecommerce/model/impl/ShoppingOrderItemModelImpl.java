@@ -64,9 +64,10 @@ public class ShoppingOrderItemModelImpl extends BaseModelImpl<ShoppingOrderItem>
 			{ "modifiedDate", Types.TIMESTAMP },
 			{ "productId", Types.VARCHAR },
 			{ "orderId", Types.BIGINT },
-			{ "quantity", Types.INTEGER }
+			{ "quantity", Types.INTEGER },
+			{ "price", Types.DOUBLE }
 		};
-	public static final String TABLE_SQL_CREATE = "create table rivetlogic_ecommerce_ShoppingOrderItem (itemId LONG not null primary key,createDate DATE null,modifiedDate DATE null,productId VARCHAR(75) null,orderId LONG,quantity INTEGER)";
+	public static final String TABLE_SQL_CREATE = "create table rivetlogic_ecommerce_ShoppingOrderItem (itemId LONG not null primary key,createDate DATE null,modifiedDate DATE null,productId VARCHAR(75) null,orderId LONG,quantity INTEGER,price DOUBLE)";
 	public static final String TABLE_SQL_DROP = "drop table rivetlogic_ecommerce_ShoppingOrderItem";
 	public static final String ORDER_BY_JPQL = " ORDER BY shoppingOrderItem.itemId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY rivetlogic_ecommerce_ShoppingOrderItem.itemId ASC";
@@ -131,6 +132,7 @@ public class ShoppingOrderItemModelImpl extends BaseModelImpl<ShoppingOrderItem>
 		attributes.put("productId", getProductId());
 		attributes.put("orderId", getOrderId());
 		attributes.put("quantity", getQuantity());
+		attributes.put("price", getPrice());
 
 		return attributes;
 	}
@@ -171,6 +173,12 @@ public class ShoppingOrderItemModelImpl extends BaseModelImpl<ShoppingOrderItem>
 
 		if (quantity != null) {
 			setQuantity(quantity);
+		}
+
+		Double price = (Double)attributes.get("price");
+
+		if (price != null) {
+			setPrice(price);
 		}
 	}
 
@@ -261,6 +269,16 @@ public class ShoppingOrderItemModelImpl extends BaseModelImpl<ShoppingOrderItem>
 		_quantity = quantity;
 	}
 
+	@Override
+	public double getPrice() {
+		return _price;
+	}
+
+	@Override
+	public void setPrice(double price) {
+		_price = price;
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -298,6 +316,7 @@ public class ShoppingOrderItemModelImpl extends BaseModelImpl<ShoppingOrderItem>
 		shoppingOrderItemImpl.setProductId(getProductId());
 		shoppingOrderItemImpl.setOrderId(getOrderId());
 		shoppingOrderItemImpl.setQuantity(getQuantity());
+		shoppingOrderItemImpl.setPrice(getPrice());
 
 		shoppingOrderItemImpl.resetOriginalValues();
 
@@ -395,12 +414,14 @@ public class ShoppingOrderItemModelImpl extends BaseModelImpl<ShoppingOrderItem>
 
 		shoppingOrderItemCacheModel.quantity = getQuantity();
 
+		shoppingOrderItemCacheModel.price = getPrice();
+
 		return shoppingOrderItemCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(15);
 
 		sb.append("{itemId=");
 		sb.append(getItemId());
@@ -414,6 +435,8 @@ public class ShoppingOrderItemModelImpl extends BaseModelImpl<ShoppingOrderItem>
 		sb.append(getOrderId());
 		sb.append(", quantity=");
 		sb.append(getQuantity());
+		sb.append(", price=");
+		sb.append(getPrice());
 		sb.append("}");
 
 		return sb.toString();
@@ -421,7 +444,7 @@ public class ShoppingOrderItemModelImpl extends BaseModelImpl<ShoppingOrderItem>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(22);
+		StringBundler sb = new StringBundler(25);
 
 		sb.append("<model><model-name>");
 		sb.append("com.rivetlogic.ecommerce.model.ShoppingOrderItem");
@@ -451,6 +474,10 @@ public class ShoppingOrderItemModelImpl extends BaseModelImpl<ShoppingOrderItem>
 			"<column><column-name>quantity</column-name><column-value><![CDATA[");
 		sb.append(getQuantity());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>price</column-name><column-value><![CDATA[");
+		sb.append(getPrice());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -470,6 +497,7 @@ public class ShoppingOrderItemModelImpl extends BaseModelImpl<ShoppingOrderItem>
 	private long _originalOrderId;
 	private boolean _setOriginalOrderId;
 	private int _quantity;
+	private double _price;
 	private long _columnBitmask;
 	private ShoppingOrderItem _escapedModel;
 }
