@@ -17,6 +17,7 @@
  */
 --%>
 
+<%@page import="com.rivetlogic.ecommerce.beans.ShoppingCartPrefsBean"%>
 <%@page import="java.util.logging.Logger"%>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@include file="/html/init.jsp" %>
@@ -28,9 +29,15 @@ String checkoutSuccessMessage = GetterUtil.getString(portletPreferences.getValue
 String checkoutErrorMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CHECKOUT_ERROR_MESSAGE, StringPool.BLANK));
 String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CART_EMPTY_MESSAGE, StringPool.BLANK));
 DecimalFormat decimalFormat = new DecimalFormat(ShoppingCartPortletConstants.DECIMAL_FORMAT);
+ShoppingCartPrefsBean prefs = (ShoppingCartPrefsBean) request.getAttribute("prefs");
 %>
 
 	<portlet:actionURL name="checkout" var="checkoutURL">
+		<portlet:param name="REDIRECT" value="<%= PortalUtil.getCurrentURL(renderRequest) %>"/>
+	</portlet:actionURL>
+	
+	<portlet:actionURL name="checkout" var="paypalCheckoutURL">
+		<portlet:param name="paypalCheckout" value="true"/>
 		<portlet:param name="REDIRECT" value="<%= PortalUtil.getCurrentURL(renderRequest) %>"/>
 	</portlet:actionURL>
 
@@ -115,41 +122,41 @@ DecimalFormat decimalFormat = new DecimalFormat(ShoppingCartPortletConstants.DEC
         <div class="span12">
           <div class="alert alert-info"><span class="text-error">*</span> indicates required field</div>
           <liferay-ui:error key="error-information-required" message="checkout-information-required-not-found" />
-          <form class="form-horizontal" action="${checkoutURL}" method="post">
+          <form id="form-checkout" class="form-horizontal" method="post">
             <div class="row-fluid">
               <div class="control-group span6">
                 <label for="email">Email Address <span class="text-error">*</span></label>
-                <input type="text" id="email" value="" name="<portlet:namespace />email" placeholder="Email Address" required>
+                <input type="text" id="email" value="jdross17-buyer@gmail.com" name="<portlet:namespace />email" placeholder="Email Address" required>
               </div>  
               <div class="control-group span6">
                 <label for="name">Name <span class="text-error">*</span></label>
-                <input type="text" id="name" value="" name="<portlet:namespace />name" placeholder="Full Name" required>
+                <input type="text" id="name" value="Jose Ross" name="<portlet:namespace />name" placeholder="Full Name" required>
               </div>
             </div>
             <div class="row-fluid">
               <div class="control-group span6">
                 <label for="street">Address line 1 <span class="text-error">*</span></label>
-                <input type="text" id="street1" value="" name="<portlet:namespace />address1" placeholder="Street Address" required>
+                <input type="text" id="street1" value="San Jose" name="<portlet:namespace />address1" placeholder="Street Address" required>
               </div>
               <div class="control-group span6">
                 <label for="street">Address line 2 </label>
-                <input type="text" id="street2" value="" name="<portlet:namespace />address2" placeholder="Building/Apt/Suite">
+                <input type="text" id="street2" value="San Jose" name="<portlet:namespace />address2" placeholder="Building/Apt/Suite">
               </div>
             </div>
             <div class="row-fluid">
               <div class="control-group span6">
                 <label for="city">City <span class="text-error">*</span></label>
-                <input type="text" id="city" value="" name="<portlet:namespace />city" placeholder="City" required>
+                <input type="text" id="city" value="San Jose" name="<portlet:namespace />city" placeholder="City" required>
               </div> 
               <div class="control-group span6">
                 <label for="State">State/Province <span class="text-error">*</span></label>
-                <input type="text" id="State" value="" name="<portlet:namespace />stateProvince" placeholder="State" required>
+                <input type="text" id="State" value="San Jose" name="<portlet:namespace />stateProvince" placeholder="State" required>
               </div>  
             </div>
             <div class="row-fluid">
               <div class="control-group span6">
                 <label for="postal">Postal Code</label>
-                <input type="text" id="postal" value="" name="<portlet:namespace />postalCode" placeholder="Postal Code">
+                <input type="text" id="postal" value="00000" name="<portlet:namespace />postalCode" placeholder="Postal Code">
               </div> 
               <div class="control-group span6">
                 <label for="country">Country <span class="text-error">*</span></label>
@@ -208,7 +215,7 @@ DecimalFormat decimalFormat = new DecimalFormat(ShoppingCartPortletConstants.DEC
                   <option value="CG">Congo</option>
                   <option value="CD">Congo, the Democratic Republic of the</option>
                   <option value="CK">Cook Islands</option>
-                  <option value="CR">Costa Rica</option>
+                  <option value="CR" selected>Costa Rica</option>
                   <option value="CI">Côte d'Ivoire</option>
                   <option value="HR">Croatia</option>
                   <option value="CU">Cuba</option>
@@ -410,13 +417,16 @@ DecimalFormat decimalFormat = new DecimalFormat(ShoppingCartPortletConstants.DEC
             <div class="row-fluid">
               <div class="control-group span6">
                 <label for="phone">Phone</label>
-                <input type="text" id="phone" value="" name="<portlet:namespace />phone" placeholder="Phone">
+                <input type="text" id="phone" value="22222222" name="<portlet:namespace />phone" placeholder="Phone">
               </div> 
             </div>
             <div class="row-fluid">
               <div class="control-group span12">
                 <div class="controls">
-                  <button type="submit" class="btn btn-primary pull-right">Checkout</button>
+                  <button type="button" class="btn btn-primary pull-right" id="btn-checkout">Checkout</button>
+                  <c:if test="${prefs.isPaypalEnabled()}">
+                  	<button type="button" class="btn btn-primary pull-right" id="btn-paypal-checkout">Paypal Checkout</button>
+                  </c:if>
                 </div>
               </div>
             </div>
@@ -436,4 +446,12 @@ DecimalFormat decimalFormat = new DecimalFormat(ShoppingCartPortletConstants.DEC
     A.all('.quantity-input').on('change', function(event){
     	A.ShoppingCart.updateCartItem(event.currentTarget);
     });
+    A.one('#btn-checkout').on('click', function(event){
+    	A.ShoppingCart.doCheckout('${checkoutURL}');
+    });
+    <c:if test="${prefs.isPaypalEnabled()}">
+    A.one('#btn-paypal-checkout').on('click', function(event){
+    	A.ShoppingCart.doCheckout('${paypalCheckoutURL}');
+    });
+    </c:if>
 </aui:script>

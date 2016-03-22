@@ -83,7 +83,6 @@ public class ShoppingCartPortlet extends MVCPortlet {
 	
 	@Override
 	public void render(RenderRequest request, RenderResponse response) throws IOException, PortletException {
-	
 		try {
 			PortletConfiguration.checkPorletConfiguration(request);
 		} catch (ReadOnlyException e) {
@@ -102,7 +101,8 @@ public class ShoppingCartPortlet extends MVCPortlet {
 	@Override
 	public void doView(RenderRequest request, RenderResponse response)
 			throws IOException, PortletException {
-		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+        request.setAttribute("prefs", new ShoppingCartPrefsBean(request));
+        ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		if (themeDisplay.isSignedIn()) {
 			try {
 				ShoppingOrder activeShoppingOrder = ShoppingOrderLocalServiceUtil.getUserActiveOrder(
@@ -263,14 +263,12 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		removeOrderItemsIdsFromSession(request);
 		SessionMessages.add(request, ShoppingCartPortletConstants.SUCCESS_MESSAGE_CHECKOUT);
 		
-		if(cartPrefsBean.isPaypalEnabled()) {
+		if(request.getParameter("paypalCheckout") != null) {
 		    return PaypalUtil.getPaypalRedirect(request, response, activeShoppingOrder);
 		} else {
 		    return null;
 		}
 	}
-	
-	
 	
 	private boolean validateCheckoutInfo(ActionRequest request){
 		boolean valid = true;

@@ -77,6 +77,7 @@
 <%@ page import="com.rivetlogic.ecommerce.cart.ShoppingCartItem" %>
 <%@ page import="com.rivetlogic.ecommerce.model.ShoppingOrderItem" %>
 <%@ page import="com.rivetlogic.ecommerce.portlet.ShoppingCartPortletConstants" %>
+<%@ page import="com.rivetlogic.ecommerce.beans.ShoppingCartPrefsBean" %>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects />
