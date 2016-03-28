@@ -49,21 +49,7 @@ public class PaypalNotificationAction extends BaseStrutsAction {
         long orderId = ParamUtil.getLong(request, PaypalConstants.PARAM_INVOICE);
         String status = ParamUtil.getString(request, PaypalConstants.PAYMENT_STATUS);
         
-        ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-
-        // Get PortletPreferences for the cart ...
-        PortletPreferences portletPreferences = null;
-        List<PortletPreferences> preferences = PortletPreferencesLocalServiceUtil.getPortletPreferences();
-        for(PortletPreferences p : preferences) {
-            if(p.getPortletId().equals("shoppingcart_WAR_ecommerceportlet")) {
-                portletPreferences = p;
-            }
-        }
-        ShoppingCartPrefsBean cartPrefsBean = new ShoppingCartPrefsBean(PortletPreferencesLocalServiceUtil.getPreferences(
-                themeDisplay.getCompanyId(), portletPreferences.getOwnerId(), portletPreferences.getOwnerType(), 
-                portletPreferences.getPlid(), portletPreferences.getPortletId()));
         
-        ShoppingOrder shoppingOrder = ShoppingOrderLocalServiceUtil.fetchShoppingOrder(orderId);
         List<ShoppingOrderItem> items = ShoppingOrderItemLocalServiceUtil.findByOrderId(orderId);
         List<String> itemsIds = new ArrayList<String>();
         for(ShoppingOrderItem item : items) {
@@ -71,8 +57,8 @@ public class PaypalNotificationAction extends BaseStrutsAction {
         }
         
         
-        //if(LOG.isDebugEnabled())
-            LOG.error(String.format("Paypal Notification for order %s, status: %s", orderId, status));
+        if(LOG.isDebugEnabled())
+            LOG.debug(String.format("Paypal Notification for order %s, status: %s", orderId, status));
         
         Enumeration<String> enu = request.getParameterNames();
 
@@ -114,11 +100,8 @@ public class PaypalNotificationAction extends BaseStrutsAction {
             if(LOG.isDebugEnabled())
                 LOG.debug("Transaction Verified, sending email...");
             
-            Message customerMessage = EmailNotificationUtil.getNotificationMessage(themeDisplay, shoppingOrder, itemsIds, cartPrefsBean, NotificationConstants.CUSTOMER_NOTIFICATION);
-            Message storeMessage = EmailNotificationUtil.getNotificationMessage(themeDisplay, shoppingOrder, itemsIds, cartPrefsBean, NotificationConstants.STORE_NOTIFICATION);
-            
-            //TODO: send messages...
-            
+            EmailNotificationUtil.sendEmailNotification(orderId);
+                
         } else {
             LOG.error("Error on Paypal Notification");
         }

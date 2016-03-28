@@ -264,6 +264,8 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		SessionMessages.add(request, ShoppingCartPortletConstants.SUCCESS_MESSAGE_CHECKOUT);
 		
 		if(request.getParameter("paypalCheckout") != null) {
+		    EmailNotificationUtil.storeEmailNotification(activeShoppingOrder.getOrderId(), customerMessage);
+		    EmailNotificationUtil.storeEmailNotification(activeShoppingOrder.getOrderId(), storeMessage);
 		    return PaypalUtil.getPaypalRedirect(request, response, activeShoppingOrder);
 		} else {
 		    return null;

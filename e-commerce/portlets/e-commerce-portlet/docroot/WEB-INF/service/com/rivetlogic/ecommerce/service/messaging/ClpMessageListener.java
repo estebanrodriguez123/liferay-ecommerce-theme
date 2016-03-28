@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 
 import com.rivetlogic.ecommerce.service.ClpSerializer;
+import com.rivetlogic.ecommerce.service.NotificationLocalServiceUtil;
 import com.rivetlogic.ecommerce.service.ShoppingOrderItemLocalServiceUtil;
 import com.rivetlogic.ecommerce.service.ShoppingOrderLocalServiceUtil;
 
@@ -36,6 +37,8 @@ public class ClpMessageListener extends BaseMessageListener {
 
 		if (command.equals("undeploy") &&
 				servletContextName.equals(getServletContextName())) {
+			NotificationLocalServiceUtil.clearService();
+
 			ShoppingOrderLocalServiceUtil.clearService();
 
 			ShoppingOrderItemLocalServiceUtil.clearService();

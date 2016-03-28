@@ -1,6 +1,15 @@
 <?xml version="1.0"?>
 
 <model-hints>
+	<model name="com.rivetlogic.ecommerce.model.Notification">
+		<field name="orderId" type="long" />
+		<field name="subject" type="String" />
+		<field name="body" type="String">
+			<hint-collection name="CLOB" />
+		</field>
+		<field name="sender" type="String" />
+		<field name="recipients" type="String" />
+	</model>
 	<model name="com.rivetlogic.ecommerce.model.ShoppingOrder">
 		<field name="orderId" type="long" />
 		<field name="groupId" type="long" />

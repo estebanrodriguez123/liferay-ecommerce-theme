@@ -391,19 +391,20 @@ public interface ShoppingOrderModel extends BaseModel<ShoppingOrder>,
 	public Object clone();
 
 	@Override
-	public int compareTo(ShoppingOrder shoppingOrder);
+	public int compareTo(
+		com.rivetlogic.ecommerce.model.ShoppingOrder shoppingOrder);
 
 	@Override
 	public int hashCode();
 
 	@Override
-	public CacheModel<ShoppingOrder> toCacheModel();
+	public CacheModel<com.rivetlogic.ecommerce.model.ShoppingOrder> toCacheModel();
 
 	@Override
-	public ShoppingOrder toEscapedModel();
+	public com.rivetlogic.ecommerce.model.ShoppingOrder toEscapedModel();
 
 	@Override
-	public ShoppingOrder toUnescapedModel();
+	public com.rivetlogic.ecommerce.model.ShoppingOrder toUnescapedModel();
 
 	@Override
 	public String toString();

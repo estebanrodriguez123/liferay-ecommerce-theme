@@ -68,5 +68,29 @@
 			<finder-column name="productId" />
 		</finder>
     </entity>
-    
+    <entity name="Notification" local-service="true"
+    	remote-service="false">
+
+    	<!-- PK fields -->
+
+    	<!-- Group instance -->
+
+    	<!-- Audit fields -->
+    	<column name="orderId" type="long" primary="true"></column>
+    	<column name="subject" type="String"></column>
+    	<column name="body" type="String"></column>
+    	<column name="sender" type="String" primary="false"></column>
+    	<column name="recipients" type="String" primary="true"></column>
+
+
+    	<!-- PK fields -->
+
+    	<!-- Group instance -->
+
+    	<!-- Audit fields -->
+        <finder name="OrderId" return-type="Collection">
+            <finder-column name="orderId"></finder-column>
+        </finder>
+    </entity>
+
 </service-builder>

@@ -1,3 +1,5 @@
+create index IX_11014B9A on rivetlogic_ecommerce_Notification (orderId);
+
 create index IX_95618E52 on rivetlogic_ecommerce_ShoppingOrder (orderStatus);
 create index IX_419C748C on rivetlogic_ecommerce_ShoppingOrder (orderStatus, userId);
 
