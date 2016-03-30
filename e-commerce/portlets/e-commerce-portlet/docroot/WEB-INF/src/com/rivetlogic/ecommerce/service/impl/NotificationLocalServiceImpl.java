@@ -1,4 +1,8 @@
 /**
+ * Copyright (C) 2016 Rivet Logic Corporation. All rights reserved.
+ */
+
+/**
  * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -33,7 +37,7 @@ import java.util.List;
  * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
  * </p>
  *
- * @author isaiulate
+ * @author joseross
  * @see com.rivetlogic.ecommerce.service.base.NotificationLocalServiceBaseImpl
  * @see com.rivetlogic.ecommerce.service.NotificationLocalServiceUtil
  */

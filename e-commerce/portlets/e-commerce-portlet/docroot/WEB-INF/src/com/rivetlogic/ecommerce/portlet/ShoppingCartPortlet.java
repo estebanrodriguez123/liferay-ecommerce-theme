@@ -187,30 +187,31 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		SessionMessages.add(request, PortalUtil.getPortletId(request) + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
 		
 		String redirect = ParamUtil.getString(request, WebKeys.REDIRECT);
+		boolean isPaypal = ParamUtil.getBoolean(request, ShoppingCartPortletConstants.CHECKOUT_PARAMETER_PAYPAL);
 		
 		if(!validateCheckoutInfo(request)){
 			SessionErrors.add(request, ShoppingCartPortletConstants.MESSAGE_MISSING_REQUIRED_CHECKOUT_INFO);
 			response.sendRedirect(redirect);
 		}
-		if(!(new ShoppingCartPrefsBean(request).isCartPrefsValidForCheckout())){
+		if(!(new ShoppingCartPrefsBean(request).isCartPrefsValidForCheckout(isPaypal))){
 			SessionErrors.add(request, ShoppingCartPortletConstants.ERROR_MESSAGE_CHECKOUT);
 			logger.error(ERROR_CHECKOUT_MISSING_PORTLET_CONFIG);
-			response.sendRedirect(redirect);
-		}
-		try {
-			String value = doCheckout(request, response);
-			if(value != null) {
-			    redirect = value;
-			}
-		} catch (Exception e) {
-			SessionErrors.add(request, ShoppingCartPortletConstants.ERROR_MESSAGE_CHECKOUT);
-			logger.error(e.getMessage());
+		} else {
+		    try {
+	            String value = doCheckout(request, response, isPaypal);
+	            if(value != null) {
+	                redirect = value;
+	            }
+	        } catch (Exception e) {
+	            SessionErrors.add(request, ShoppingCartPortletConstants.ERROR_MESSAGE_CHECKOUT);
+	            logger.error(e);
+	        }
 		}
 		
 		response.sendRedirect(redirect);
 	}
 	
-	private String doCheckout(ActionRequest request, ActionResponse response) throws Exception{
+	private String doCheckout(ActionRequest request, ActionResponse response, boolean isPaypal) throws Exception{
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		ShoppingOrder activeShoppingOrder = null;
 		List<String> orderItemsIdsList = null;
@@ -259,11 +260,11 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		Message customerMessage = EmailNotificationUtil.getNotificationMessage(themeDisplay, activeShoppingOrder, orderItemsIdsList, cartPrefsBean, NotificationConstants.CUSTOMER_NOTIFICATION);
 		Message storeMessage = EmailNotificationUtil.getNotificationMessage(themeDisplay, activeShoppingOrder, orderItemsIdsList, cartPrefsBean, NotificationConstants.STORE_NOTIFICATION);
 		
-		ShoppingOrderLocalServiceUtil.placeOrder(activeShoppingOrder, new Message[]{customerMessage, storeMessage}, orderItemsIdsList, prices, cartPrefsBean.isPaypalEnabled());
+		ShoppingOrderLocalServiceUtil.placeOrder(activeShoppingOrder, new Message[]{customerMessage, storeMessage}, orderItemsIdsList, prices, isPaypal);
 		removeOrderItemsIdsFromSession(request);
 		SessionMessages.add(request, ShoppingCartPortletConstants.SUCCESS_MESSAGE_CHECKOUT);
 		
-		if(request.getParameter("paypalCheckout") != null) {
+		if(isPaypal) {
 		    EmailNotificationUtil.storeEmailNotification(activeShoppingOrder.getOrderId(), customerMessage);
 		    EmailNotificationUtil.storeEmailNotification(activeShoppingOrder.getOrderId(), storeMessage);
 		    return PaypalUtil.getPaypalRedirect(request, response, activeShoppingOrder);

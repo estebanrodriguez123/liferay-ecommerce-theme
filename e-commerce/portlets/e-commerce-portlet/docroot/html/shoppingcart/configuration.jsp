@@ -30,7 +30,7 @@ ShoppingCartPrefsBean shoppingCartPrefsBean = (ShoppingCartPrefsBean)request.get
   <strong>All</strong> configuration fields are required. Looks like you did not enter all of them!
 </div>
 
-<liferay-ui:tabs names="Store Email,Customer Email,Messages, Paypal" refresh="false" tabsValues="Store Email,Customer Email,Messages,Paypal" type="pills">
+<liferay-ui:tabs names="Store Email,Customer Email,Messages,Paypal" refresh="false" tabsValues="Store Email,Customer Email,Messages,Paypal" type="pills">
 	<aui:form action="<%= configurationURL %>" method="post" name="fm">
 		<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 	    <liferay-ui:section>

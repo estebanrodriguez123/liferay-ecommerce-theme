@@ -126,37 +126,37 @@ ShoppingCartPrefsBean prefs = (ShoppingCartPrefsBean) request.getAttribute("pref
             <div class="row-fluid">
               <div class="control-group span6">
                 <label for="email">Email Address <span class="text-error">*</span></label>
-                <input type="text" id="email" value="jdross17-buyer@gmail.com" name="<portlet:namespace />email" placeholder="Email Address" required>
+                <input type="text" id="email" value="" name="<portlet:namespace />email" placeholder="Email Address" required>
               </div>  
               <div class="control-group span6">
                 <label for="name">Name <span class="text-error">*</span></label>
-                <input type="text" id="name" value="Jose Ross" name="<portlet:namespace />name" placeholder="Full Name" required>
+                <input type="text" id="name" value="" name="<portlet:namespace />name" placeholder="Full Name" required>
               </div>
             </div>
             <div class="row-fluid">
               <div class="control-group span6">
                 <label for="street">Address line 1 <span class="text-error">*</span></label>
-                <input type="text" id="street1" value="San Jose" name="<portlet:namespace />address1" placeholder="Street Address" required>
+                <input type="text" id="street1" value="" name="<portlet:namespace />address1" placeholder="Street Address" required>
               </div>
               <div class="control-group span6">
                 <label for="street">Address line 2 </label>
-                <input type="text" id="street2" value="San Jose" name="<portlet:namespace />address2" placeholder="Building/Apt/Suite">
+                <input type="text" id="street2" value="" name="<portlet:namespace />address2" placeholder="Building/Apt/Suite">
               </div>
             </div>
             <div class="row-fluid">
               <div class="control-group span6">
                 <label for="city">City <span class="text-error">*</span></label>
-                <input type="text" id="city" value="San Jose" name="<portlet:namespace />city" placeholder="City" required>
+                <input type="text" id="city" value="" name="<portlet:namespace />city" placeholder="City" required>
               </div> 
               <div class="control-group span6">
                 <label for="State">State/Province <span class="text-error">*</span></label>
-                <input type="text" id="State" value="San Jose" name="<portlet:namespace />stateProvince" placeholder="State" required>
+                <input type="text" id="State" value="" name="<portlet:namespace />stateProvince" placeholder="State" required>
               </div>  
             </div>
             <div class="row-fluid">
               <div class="control-group span6">
                 <label for="postal">Postal Code</label>
-                <input type="text" id="postal" value="00000" name="<portlet:namespace />postalCode" placeholder="Postal Code">
+                <input type="text" id="postal" value="" name="<portlet:namespace />postalCode" placeholder="Postal Code">
               </div> 
               <div class="control-group span6">
                 <label for="country">Country <span class="text-error">*</span></label>
@@ -215,7 +215,7 @@ ShoppingCartPrefsBean prefs = (ShoppingCartPrefsBean) request.getAttribute("pref
                   <option value="CG">Congo</option>
                   <option value="CD">Congo, the Democratic Republic of the</option>
                   <option value="CK">Cook Islands</option>
-                  <option value="CR" selected>Costa Rica</option>
+                  <option value="CR">Costa Rica</option>
                   <option value="CI">Côte d'Ivoire</option>
                   <option value="HR">Croatia</option>
                   <option value="CU">Cuba</option>
@@ -417,16 +417,16 @@ ShoppingCartPrefsBean prefs = (ShoppingCartPrefsBean) request.getAttribute("pref
             <div class="row-fluid">
               <div class="control-group span6">
                 <label for="phone">Phone</label>
-                <input type="text" id="phone" value="22222222" name="<portlet:namespace />phone" placeholder="Phone">
+                <input type="text" id="phone" value="" name="<portlet:namespace />phone" placeholder="Phone">
               </div> 
             </div>
             <div class="row-fluid">
               <div class="control-group span12">
-                <div class="controls">
-                  <button type="button" class="btn btn-primary pull-right" id="btn-checkout">Checkout</button>
+                <div class="controls pull-right">
                   <c:if test="${prefs.isPaypalEnabled()}">
-                  	<button type="button" class="btn btn-primary pull-right" id="btn-paypal-checkout">Paypal Checkout</button>
+                  	<button type="button" class="btn btn-primary" id="btn-paypal-checkout">Paypal Checkout</button>
                   </c:if>
+                  <button type="button" class="btn btn-primary" id="btn-checkout">Offline Checkout</button>
                 </div>
               </div>
             </div>

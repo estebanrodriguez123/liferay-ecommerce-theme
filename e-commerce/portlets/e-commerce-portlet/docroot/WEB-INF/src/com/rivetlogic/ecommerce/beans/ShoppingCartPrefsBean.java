@@ -67,13 +67,17 @@ public class ShoppingCartPrefsBean {
     	setPaypalEmail(portletPreferences.getValue(PreferencesKeys.PAYPAL_EMAIL, StringPool.BLANK));
     }
     
-    public boolean isCartPrefsValidForCheckout(){
-    	return ((null != getStoreEmail() && !getStoreEmail().isEmpty()) &&
+    public boolean isCartPrefsValidForCheckout(boolean isPaypal){
+        boolean valid = ((null != getStoreEmail() && !getStoreEmail().isEmpty()) &&
     	(null != getStoreName() && !getStoreName().isEmpty()) &&
     	(null != getCustomerNotifSubjectTemplate() && !getCustomerNotifSubjectTemplate().isEmpty()) &&
     	(null != getCustomerNotifBodyTemplate() && !getCustomerNotifBodyTemplate().isEmpty()) &&
     	(null != getStoreNotifSubjectTemplate() && !getStoreNotifSubjectTemplate().isEmpty()) &&
     	(null != getStoreNotifBodyTemplate() && !getStoreNotifBodyTemplate().isEmpty()));
+        if(isPaypal) {
+            valid = valid && ((isPaypalEnabled() && null != getPaypalEmail() && !getPaypalEmail().isEmpty()) || !isPaypalEnabled());
+        }
+        return valid;
     }
     
     public boolean isCartPrefsValid(){

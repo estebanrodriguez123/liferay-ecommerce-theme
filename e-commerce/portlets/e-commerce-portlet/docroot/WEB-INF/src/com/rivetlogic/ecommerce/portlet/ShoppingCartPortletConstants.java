@@ -50,6 +50,7 @@ public class ShoppingCartPortletConstants {
     public static final String CHECKOUT_PARAMETER_POSTAL_CODE = "postalCode";
     public static final String CHECKOUT_PARAMETER_COUNTRY = "country";
     public static final String CHECKOUT_PARAMETER_PHONE = "phone";
+    public static final String CHECKOUT_PARAMETER_PAYPAL = "paypalCheckout";
     
     public static final String SUCCESS_MESSAGE_CHECKOUT = "success-message-checkout";
     public static final String ERROR_MESSAGE_CHECKOUT = "error-message-checkout";
