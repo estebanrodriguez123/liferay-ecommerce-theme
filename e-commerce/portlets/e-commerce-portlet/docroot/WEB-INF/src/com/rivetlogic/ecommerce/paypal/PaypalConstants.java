@@ -24,7 +24,12 @@ package com.rivetlogic.ecommerce.paypal;
  */
 public class PaypalConstants {
 
-    public static final String PAYPAL_ENDPOINT = "https://www.sandbox.paypal.com/cgi-bin/webscr";
+    // DEVELOPMENT ENDPOINT:
+    //public static final String PAYPAL_ENDPOINT = "https://www.sandbox.paypal.com/cgi-bin/webscr";
+    
+    // PRODUCTION ENDPOINT:
+    public static final String PAYPAL_ENDPOINT = "https://www.paypal.com/cgi-bin/webscr";
+    
     public static final String NOTIFY_ACTION_PATH = "/c/ecommerce/notify";
     
     public static final String PAYMENT_STATUS = "payment_status";

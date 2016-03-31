@@ -191,9 +191,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		
 		if(!validateCheckoutInfo(request)){
 			SessionErrors.add(request, ShoppingCartPortletConstants.MESSAGE_MISSING_REQUIRED_CHECKOUT_INFO);
-			response.sendRedirect(redirect);
-		}
-		if(!(new ShoppingCartPrefsBean(request).isCartPrefsValidForCheckout(isPaypal))){
+		} else if(!(new ShoppingCartPrefsBean(request).isCartPrefsValidForCheckout(isPaypal))){
 			SessionErrors.add(request, ShoppingCartPortletConstants.ERROR_MESSAGE_CHECKOUT);
 			logger.error(ERROR_CHECKOUT_MISSING_PORTLET_CONFIG);
 		} else {
@@ -262,13 +260,13 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		
 		ShoppingOrderLocalServiceUtil.placeOrder(activeShoppingOrder, new Message[]{customerMessage, storeMessage}, orderItemsIdsList, prices, isPaypal);
 		removeOrderItemsIdsFromSession(request);
-		SessionMessages.add(request, ShoppingCartPortletConstants.SUCCESS_MESSAGE_CHECKOUT);
 		
 		if(isPaypal) {
 		    EmailNotificationUtil.storeEmailNotification(activeShoppingOrder.getOrderId(), customerMessage);
 		    EmailNotificationUtil.storeEmailNotification(activeShoppingOrder.getOrderId(), storeMessage);
 		    return PaypalUtil.getPaypalRedirect(request, response, activeShoppingOrder);
 		} else {
+		    SessionMessages.add(request, ShoppingCartPortletConstants.SUCCESS_MESSAGE_CHECKOUT);
 		    return null;
 		}
 	}

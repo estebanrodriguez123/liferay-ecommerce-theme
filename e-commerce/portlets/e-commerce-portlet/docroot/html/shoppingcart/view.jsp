@@ -44,6 +44,7 @@ ShoppingCartPrefsBean prefs = (ShoppingCartPrefsBean) request.getAttribute("pref
 <liferay-ui:success key="success-message-checkout" message="<%=checkoutSuccessMessage %>" />
 <liferay-ui:error key="error-message-checkout" message="<%=checkoutErrorMessage %>" />
 
+<input type="hidden" id="page-reloaded" value="no" />
 <div class="row-fluid">
       	<div class="span12">
       		<div class="block">
@@ -122,6 +123,9 @@ ShoppingCartPrefsBean prefs = (ShoppingCartPrefsBean) request.getAttribute("pref
         <div class="span12">
           <div class="alert alert-info"><span class="text-error">*</span> indicates required field</div>
           <liferay-ui:error key="error-information-required" message="checkout-information-required-not-found" />
+          <div id="page-reload-warning" class="alert alert-warning hide">
+          	<liferay-ui:message key="reload-message-checkout" />
+          </div>
           <form id="form-checkout" class="form-horizontal" method="post">
             <div class="row-fluid">
               <div class="control-group span6">
@@ -446,12 +450,25 @@ ShoppingCartPrefsBean prefs = (ShoppingCartPrefsBean) request.getAttribute("pref
     A.all('.quantity-input').on('change', function(event){
     	A.ShoppingCart.updateCartItem(event.currentTarget);
     });
-    A.one('#btn-checkout').on('click', function(event){
+    A.all('#btn-checkout').on('click', function(event){
     	A.ShoppingCart.doCheckout('${checkoutURL}');
     });
     <c:if test="${prefs.isPaypalEnabled()}">
-    A.one('#btn-paypal-checkout').on('click', function(event){
+    A.all('#btn-paypal-checkout').on('click', function(event){
     	A.ShoppingCart.doCheckout('${paypalCheckoutURL}');
     });
     </c:if>
+    
+    var pageReloaded = A.one('#page-reloaded');
+    
+    A.on('unload', function(){
+    	pageReloaded.attr('value', 'yes');
+    });
+    
+    A.ready(function(){
+        if(pageReloaded.attr('value') == 'yes') {
+        	A.all('#btn-checkout, #btn-paypal-checkout').attr('disabled', true);
+        	A.all('#page-reload-warning').removeClass('hide');
+        }
+    });
 </aui:script>
