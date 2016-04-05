@@ -1,3 +1,12 @@
+create table rivetlogic_ecommerce_Notification (
+	orderId LONG not null,
+	subject VARCHAR(75) null,
+	body TEXT null,
+	sender VARCHAR(75) null,
+	recipients VARCHAR(75) not null,
+	primary key (orderId, recipients)
+);
+
 create table rivetlogic_ecommerce_ShoppingOrder (
 	orderId LONG not null primary key,
 	groupId LONG,
@@ -15,7 +24,8 @@ create table rivetlogic_ecommerce_ShoppingOrder (
 	shippingCity VARCHAR(75) null,
 	shippingPostalCode VARCHAR(75) null,
 	shippingStateProvince VARCHAR(75) null,
-	shippingCountry VARCHAR(75) null
+	shippingCountry VARCHAR(75) null,
+	total DOUBLE
 );
 
 create table rivetlogic_ecommerce_ShoppingOrderItem (
@@ -24,5 +34,6 @@ create table rivetlogic_ecommerce_ShoppingOrderItem (
 	modifiedDate DATE null,
 	productId VARCHAR(75) null,
 	orderId LONG,
-	quantity INTEGER
+	quantity INTEGER,
+	price DOUBLE
 );

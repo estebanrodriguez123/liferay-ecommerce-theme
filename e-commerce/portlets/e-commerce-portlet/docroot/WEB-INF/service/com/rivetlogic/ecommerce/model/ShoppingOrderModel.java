@@ -340,6 +340,20 @@ public interface ShoppingOrderModel extends BaseModel<ShoppingOrder>,
 	 */
 	public void setShippingCountry(String shippingCountry);
 
+	/**
+	 * Returns the total of this Shopping Order.
+	 *
+	 * @return the total of this Shopping Order
+	 */
+	public double getTotal();
+
+	/**
+	 * Sets the total of this Shopping Order.
+	 *
+	 * @param total the total of this Shopping Order
+	 */
+	public void setTotal(double total);
+
 	@Override
 	public boolean isNew();
 

@@ -56,6 +56,7 @@ public class ShoppingOrderItemWrapper implements ShoppingOrderItem,
 		attributes.put("productId", getProductId());
 		attributes.put("orderId", getOrderId());
 		attributes.put("quantity", getQuantity());
+		attributes.put("price", getPrice());
 
 		return attributes;
 	}
@@ -96,6 +97,12 @@ public class ShoppingOrderItemWrapper implements ShoppingOrderItem,
 
 		if (quantity != null) {
 			setQuantity(quantity);
+		}
+
+		Double price = (Double)attributes.get("price");
+
+		if (price != null) {
+			setPrice(price);
 		}
 	}
 
@@ -237,6 +244,26 @@ public class ShoppingOrderItemWrapper implements ShoppingOrderItem,
 	@Override
 	public void setQuantity(int quantity) {
 		_shoppingOrderItem.setQuantity(quantity);
+	}
+
+	/**
+	* Returns the price of this Shopping Order Item.
+	*
+	* @return the price of this Shopping Order Item
+	*/
+	@Override
+	public double getPrice() {
+		return _shoppingOrderItem.getPrice();
+	}
+
+	/**
+	* Sets the price of this Shopping Order Item.
+	*
+	* @param price the price of this Shopping Order Item
+	*/
+	@Override
+	public void setPrice(double price) {
+		_shoppingOrderItem.setPrice(price);
 	}
 
 	@Override

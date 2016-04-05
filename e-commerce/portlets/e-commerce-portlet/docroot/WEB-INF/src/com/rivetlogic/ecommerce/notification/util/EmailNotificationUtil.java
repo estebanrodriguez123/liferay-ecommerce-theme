@@ -22,14 +22,30 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.ContentUtil;
 import com.liferay.util.mail.MailEngine;
+import com.rivetlogic.ecommerce.beans.ShoppingCartPrefsBean;
+import com.rivetlogic.ecommerce.cart.ShoppingCartItem;
+import com.rivetlogic.ecommerce.cart.ShoppingCartItemUtil;
+import com.rivetlogic.ecommerce.model.Notification;
+import com.rivetlogic.ecommerce.model.ShoppingOrder;
 import com.rivetlogic.ecommerce.notification.constants.NotificationConstants;
+import com.rivetlogic.ecommerce.portlet.ShoppingCartPortletConstants;
+import com.rivetlogic.ecommerce.service.NotificationLocalServiceUtil;
 
 import java.io.StringWriter;
+import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+
+import javax.mail.internet.InternetAddress;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -39,33 +55,113 @@ import org.apache.velocity.app.Velocity;
  */
 
 public class EmailNotificationUtil {
-	    
+	
+    public static String getPortalLogo(ThemeDisplay themeDisplay) {
+        return themeDisplay.getPortalURL() + PortalUtil.getPathImage()
+                + "/company_logo?img_id="
+                + themeDisplay.getLayoutSet().getLogoId();
+    }
+    
+    public static Message getNotificationMessage(ThemeDisplay themeDisplay, ShoppingOrder shoppingOrder, List<String> cartItemsProductIdList, 
+            ShoppingCartPrefsBean cartPrefsBean, String notificationType) throws Exception {
+        Message message = new Message();
+        message.put(NotificationConstants.CMD, notificationType);
+        message.put(NotificationConstants.STORE_EMAIL, cartPrefsBean.getStoreEmail());
+        message.put(NotificationConstants.STORE_NAME, cartPrefsBean.getStoreName());
+        message.put(NotificationConstants.CUSTOMER_EMAIL, shoppingOrder.getCustomerEmail());
+        message.put(NotificationConstants.CUSTOMER_NAME, shoppingOrder.getCustomerName());
+        message.put(NotificationConstants.SHOPPING_ORDER, shoppingOrder);
+        message.put(NotificationConstants.PORTAL_URL, themeDisplay.getPortalURL());
+        message.put(NotificationConstants.PORTAL_LOGO, getPortalLogo(themeDisplay));
+        message.put(NotificationConstants.DATE, DateUtil.getDate(new Date(), DATE_FORMAT, Locale.US));
+
+        List<ShoppingCartItem> shoppingCartItems = 
+                (themeDisplay.isSignedIn() ? ShoppingCartItemUtil.getCartItems(shoppingOrder.getOrderId(), themeDisplay) : ShoppingCartItemUtil.getCartItemsByProductId(cartItemsProductIdList, themeDisplay));
+        if (null != shoppingCartItems) {
+            message.put(NotificationConstants.SHOPPING_ORDER_ITEMS, shoppingCartItems);
+            double orderTotal = 0l;
+            for (ShoppingCartItem shoppingCartItem : shoppingCartItems) {
+                orderTotal += Float.valueOf(shoppingCartItem.getPrice())
+                        * (float) shoppingCartItem.getCount();
+            }
+            message.put(NotificationConstants.ORDER_TOTAL, new DecimalFormat(ShoppingCartPortletConstants.DECIMAL_FORMAT).format(orderTotal));
+        }
+
+        if (NotificationConstants.STORE_NOTIFICATION.equals(notificationType)) {
+            message.put(NotificationConstants.BODY_TEMPLATE, cartPrefsBean.getStoreNotifBodyTemplate());
+            message.put(NotificationConstants.SUBJECT_TEMPLATE, cartPrefsBean.getStoreNotifSubjectTemplate());
+        } else {
+            message.put(NotificationConstants.BODY_TEMPLATE, cartPrefsBean.getCustomerNotifBodyTemplate());
+            message.put(NotificationConstants.SUBJECT_TEMPLATE, cartPrefsBean.getCustomerNotifSubjectTemplate());
+        }
+        return message;
+    }
+    
 	    public static void sendEmailNotification(Message message) throws SystemException {
 	    	try{
-		        MessageSender messageSender = processMessage(message);
-		        MailMessage mailMessage = new MailMessage(messageSender.getSender(), messageSender.getSubject(),
-		                messageSender.getBody(), messageSender.isHTMLFormat());
-		        mailMessage.setTo(messageSender.getRecipients());
-		        MailEngine.send(mailMessage);
+	    	    Notification notification = processMessage(message);
+	    	    sendEmailNotification(notification);
 	    	}catch(Exception e){
 	    		LOGGER.error(String.format(ERROR_SENDING_NOTIFICATION, message.getString(NotificationConstants.CMD), e.getMessage()));
 	    		throw new SystemException(e.getMessage());
 	    	}
 	    }
 	    
-	    private static MessageSender processMessage(Message message) throws Exception{
+	    public static void sendEmailNotification(Notification notification) throws Exception {
+	        InternetAddress sender = InternetAddress.parse(notification.getSender())[0],
+                    recipient = InternetAddress.parse(notification.getRecipients())[0];
+            MailMessage mailMessage = new MailMessage(sender, notification.getSubject(),
+                    notification.getBody(), true);
+            mailMessage.setTo(recipient);
+            MailEngine.send(mailMessage);
+	    }
+	    
+	    public static void storeEmailNotification(long orderId, Message message) {
+	        try {
+	            Notification notification = processMessage(message);
+	            NotificationLocalServiceUtil.storeNotification(notification);
+	        } catch (Exception e) {
+	            LOGGER.error(e);
+	        }
+	        
+	    }
+	    
+	    public static void sendEmailNotification(long orderId) {
+	        try {
+                List<Notification> notifications = NotificationLocalServiceUtil.findByOrderId(orderId);
+                for(Notification n : notifications) {
+                    sendEmailNotification(n);
+                    NotificationLocalServiceUtil.deleteNotification(n);
+                }
+            } catch (Exception e) {
+                LOGGER.error(e);
+            }
+	    }
+	    
+	    private static Notification processMessage(Message message) throws Exception{
 	    	
-	    	MessageSender messageSender = new MessageSender();
+	    	Notification notification = null;
+	    	ShoppingOrder order = (ShoppingOrder) message.get(NotificationConstants.SHOPPING_ORDER);
 	    	
-    		messageSender.setSender(message.getString(NotificationConstants.STORE_EMAIL));
-    		messageSender.setSubject(message.getString(NotificationConstants.SUBJECT_TEMPLATE));
-    		messageSender.setBody(message.getString(NotificationConstants.BODY_TEMPLATE));
-    		messageSender.setHTMLFormat(true);
+	    	if(NotificationConstants.CUSTOMER_NOTIFICATION.equals(message.getString(NotificationConstants.CMD))){
+	    	    notification = NotificationLocalServiceUtil.create(
+	    	            order.getOrderId(), 
+	    	            message.getString(NotificationConstants.CUSTOMER_EMAIL));
+            }else{
+                notification = NotificationLocalServiceUtil.create(
+                        order.getOrderId(), 
+                        message.getString(NotificationConstants.STORE_EMAIL));
+            }
+	    	
+	    	notification.setSender(message.getString(NotificationConstants.STORE_EMAIL));
+	    	notification.setSubject(message.getString(NotificationConstants.SUBJECT_TEMPLATE));
+	    	notification.setBody(message.getString(NotificationConstants.BODY_TEMPLATE));
+    		//messageSender.setHTMLFormat(true);
     		
 	    	if(NotificationConstants.CUSTOMER_NOTIFICATION.equals(message.getString(NotificationConstants.CMD))){
-	    		messageSender.setRecipients(message.getString(NotificationConstants.CUSTOMER_EMAIL));
+	    	    notification.setRecipients(message.getString(NotificationConstants.CUSTOMER_EMAIL));
 	    	}else{
-	    		messageSender.setRecipients(message.getString(NotificationConstants.STORE_EMAIL));
+	    	    notification.setRecipients(message.getString(NotificationConstants.STORE_EMAIL));
 	    	}
     		
     		Map<String, Object> variables = new HashMap<String, Object>();
@@ -79,9 +175,9 @@ public class EmailNotificationUtil {
     		variables.put(NotificationConstants.PORTAL_LOGO, message.get(NotificationConstants.PORTAL_LOGO));
     		variables.put(NotificationConstants.ORDER_TOTAL, message.get(NotificationConstants.ORDER_TOTAL));
     		variables.put(NotificationConstants.DATE, message.get(NotificationConstants.DATE));
-    		processTemplates(messageSender, variables);
+    		processTemplates(notification, variables);
     		
-	    	return messageSender;
+	    	return notification;
 	    }
 	    
 	    private static String evaluateTemplate(final Map<String, Object> values, final String emailTemplate) {
@@ -98,15 +194,15 @@ public class EmailNotificationUtil {
 	        return result;
 	    }
 	    
-	    private static void processTemplates(MessageSender messageSender, Map<String, Object> variables) throws Exception {
+	    private static void processTemplates(Notification notification, Map<String, Object> variables) throws Exception {
 	    	addCommonTemplates(variables);
-	    	messageSender.setBody(evaluateTemplate(variables, messageSender.getBody()));
-	    	messageSender.setSubject(evaluateTemplate(variables, messageSender.getSubject()));
+	    	notification.setBody(evaluateTemplate(variables, notification.getBody()));
+	    	notification.setSubject(evaluateTemplate(variables, notification.getSubject()));
 	    	StringBuilder strBuilder = new StringBuilder();
 	    	strBuilder.append(ContentUtil.get(NotificationConstants.BODY_HEADER_TEMPLATE));
-	    	strBuilder.append(messageSender.getBody());
+	    	strBuilder.append(notification.getBody());
 	    	strBuilder.append(ContentUtil.get(NotificationConstants.BODY_FOOTER_TEMPLATE));
-	    	messageSender.setBody(strBuilder.toString());
+	    	notification.setBody(strBuilder.toString());
 	    }
 	    
 	    private static void addCommonTemplates(Map<String, Object> messageObjects){
@@ -150,4 +246,5 @@ public class EmailNotificationUtil {
 		private static final Log LOGGER = LogFactoryUtil.getLog(EmailNotificationUtil.class);
 		private static final String TEMPLATE_PROCESSING_ERROR = "Error while processing an email velocity template. Template value: %S. %S";
 		private static final String ERROR_SENDING_NOTIFICATION = "Error while sending a notification. Notification Type: %S. %S";
+		private static final String DATE_FORMAT = "EEE, MMM d, yyyy ha";
 }

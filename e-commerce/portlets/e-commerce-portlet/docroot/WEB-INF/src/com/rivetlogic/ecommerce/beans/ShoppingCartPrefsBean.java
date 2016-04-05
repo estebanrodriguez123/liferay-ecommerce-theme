@@ -18,6 +18,7 @@
 
 package com.rivetlogic.ecommerce.beans;
 
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.rivetlogic.ecommerce.util.PreferencesKeys;
 
@@ -40,8 +41,14 @@ public class ShoppingCartPrefsBean {
 	private String checkoutErrorMessage;
 	private String cartIsEmptyMessage;
 	
+	private boolean paypalEnabled;
+	private String paypalEmail;
+	
     public ShoppingCartPrefsBean(PortletRequest request) {
-        PortletPreferences preferences = request.getPreferences();
+        this(request.getPreferences());
+    }
+    
+    public ShoppingCartPrefsBean(PortletPreferences preferences) {
         setFields(preferences);
     }
     
@@ -55,15 +62,22 @@ public class ShoppingCartPrefsBean {
     	setCheckoutErrorMessage(portletPreferences.getValue(PreferencesKeys.CHECKOUT_ERROR_MESSAGE, StringPool.BLANK));
     	setCheckoutSuccessMessage(portletPreferences.getValue(PreferencesKeys.CHECKOUT_SUCCESS_MESSAGE, StringPool.BLANK));
     	setCartIsEmptyMessage(portletPreferences.getValue(PreferencesKeys.CART_EMPTY_MESSAGE, StringPool.BLANK));
+    	
+    	setPaypalEnabled(GetterUtil.getBoolean(portletPreferences.getValue(PreferencesKeys.ENABLE_PAYPAL, StringPool.FALSE)));
+    	setPaypalEmail(portletPreferences.getValue(PreferencesKeys.PAYPAL_EMAIL, StringPool.BLANK));
     }
     
-    public boolean isCartPrefsValidForCheckout(){
-    	return ((null != getStoreEmail() && !getStoreEmail().isEmpty()) &&
+    public boolean isCartPrefsValidForCheckout(boolean isPaypal){
+        boolean valid = ((null != getStoreEmail() && !getStoreEmail().isEmpty()) &&
     	(null != getStoreName() && !getStoreName().isEmpty()) &&
     	(null != getCustomerNotifSubjectTemplate() && !getCustomerNotifSubjectTemplate().isEmpty()) &&
     	(null != getCustomerNotifBodyTemplate() && !getCustomerNotifBodyTemplate().isEmpty()) &&
     	(null != getStoreNotifSubjectTemplate() && !getStoreNotifSubjectTemplate().isEmpty()) &&
     	(null != getStoreNotifBodyTemplate() && !getStoreNotifBodyTemplate().isEmpty()));
+        if(isPaypal) {
+            valid = valid && ((isPaypalEnabled() && null != getPaypalEmail() && !getPaypalEmail().isEmpty()) || !isPaypalEnabled());
+        }
+        return valid;
     }
     
     public boolean isCartPrefsValid(){
@@ -149,6 +163,22 @@ public class ShoppingCartPrefsBean {
 	public void setCartIsEmptyMessage(String cartIsEmptyMessage) {
 		this.cartIsEmptyMessage = cartIsEmptyMessage;
 	}
+
+    public boolean isPaypalEnabled() {
+        return paypalEnabled;
+    }
+
+    public void setPaypalEnabled(boolean enablePaypal) {
+        this.paypalEnabled = enablePaypal;
+    }
+
+    public String getPaypalEmail() {
+        return paypalEmail;
+    }
+
+    public void setPaypalEmail(String paypalEmail) {
+        this.paypalEmail = paypalEmail;
+    }
     
 	
 }

@@ -33,6 +33,7 @@ import com.liferay.portal.service.persistence.UserPersistence;
 
 import com.rivetlogic.ecommerce.model.ShoppingOrderItem;
 import com.rivetlogic.ecommerce.service.ShoppingOrderItemLocalService;
+import com.rivetlogic.ecommerce.service.persistence.NotificationPersistence;
 import com.rivetlogic.ecommerce.service.persistence.ShoppingOrderItemPersistence;
 import com.rivetlogic.ecommerce.service.persistence.ShoppingOrderPersistence;
 
@@ -279,6 +280,44 @@ public abstract class ShoppingOrderItemLocalServiceBaseImpl
 	public ShoppingOrderItem updateShoppingOrderItem(
 		ShoppingOrderItem shoppingOrderItem) throws SystemException {
 		return shoppingOrderItemPersistence.update(shoppingOrderItem);
+	}
+
+	/**
+	 * Returns the notification local service.
+	 *
+	 * @return the notification local service
+	 */
+	public com.rivetlogic.ecommerce.service.NotificationLocalService getNotificationLocalService() {
+		return notificationLocalService;
+	}
+
+	/**
+	 * Sets the notification local service.
+	 *
+	 * @param notificationLocalService the notification local service
+	 */
+	public void setNotificationLocalService(
+		com.rivetlogic.ecommerce.service.NotificationLocalService notificationLocalService) {
+		this.notificationLocalService = notificationLocalService;
+	}
+
+	/**
+	 * Returns the notification persistence.
+	 *
+	 * @return the notification persistence
+	 */
+	public NotificationPersistence getNotificationPersistence() {
+		return notificationPersistence;
+	}
+
+	/**
+	 * Sets the notification persistence.
+	 *
+	 * @param notificationPersistence the notification persistence
+	 */
+	public void setNotificationPersistence(
+		NotificationPersistence notificationPersistence) {
+		this.notificationPersistence = notificationPersistence;
 	}
 
 	/**
@@ -533,6 +572,10 @@ public abstract class ShoppingOrderItemLocalServiceBaseImpl
 		}
 	}
 
+	@BeanReference(type = com.rivetlogic.ecommerce.service.NotificationLocalService.class)
+	protected com.rivetlogic.ecommerce.service.NotificationLocalService notificationLocalService;
+	@BeanReference(type = NotificationPersistence.class)
+	protected NotificationPersistence notificationPersistence;
 	@BeanReference(type = com.rivetlogic.ecommerce.service.ShoppingOrderLocalService.class)
 	protected com.rivetlogic.ecommerce.service.ShoppingOrderLocalService shoppingOrderLocalService;
 	@BeanReference(type = ShoppingOrderPersistence.class)

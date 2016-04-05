@@ -6,6 +6,7 @@
 	<portlet>
 		<portlet-name>shopping-cart</portlet-name>
 		<icon>/icon.png</icon>
+		<struts-path>ecommerce</struts-path>
 		<configuration-action-class>com.rivetlogic.ecommerce.configuration.PortletConfiguration</configuration-action-class>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>

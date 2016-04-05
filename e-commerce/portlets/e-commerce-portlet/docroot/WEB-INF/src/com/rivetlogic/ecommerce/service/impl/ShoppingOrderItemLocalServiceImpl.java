@@ -29,6 +29,7 @@ import com.rivetlogic.ecommerce.service.base.ShoppingOrderItemLocalServiceBaseIm
 import com.rivetlogic.ecommerce.service.persistence.ShoppingOrderItemUtil;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The implementation of the Shopping Order Item local service.
@@ -86,6 +87,19 @@ public class ShoppingOrderItemLocalServiceImpl
 		shoppingOrderItem.setModifiedDate(DateUtil.newDate());
 		ShoppingOrderItemLocalServiceUtil.updateOrderItem(shoppingOrderItem);
 	}
+	
+	public void saveOrderItem(String productId, long orderId, float price) throws SystemException {
+	    ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil
+                .createOrderItem(CounterLocalServiceUtil
+                        .increment(ShoppingOrderItem.class.getName()));
+        shoppingOrderItem.setOrderId(orderId);
+        shoppingOrderItem.setQuantity(1);
+        shoppingOrderItem.setPrice(price);
+        shoppingOrderItem.setProductId(productId);
+        shoppingOrderItem.setCreateDate(DateUtil.newDate());
+        shoppingOrderItem.setModifiedDate(DateUtil.newDate());
+        ShoppingOrderItemLocalServiceUtil.updateOrderItem(shoppingOrderItem);
+	}
 
 	public void saveOrderItemsByProductId(List<String> productIdsList,
 			ShoppingOrder shoppingOrder) throws SystemException {
@@ -112,6 +126,57 @@ public class ShoppingOrderItemLocalServiceImpl
 			}
 		}
 	}
+	
+	public void saveOrderItemsByProductId(List<String> productIdsList,
+            ShoppingOrder shoppingOrder, Map<String, Float> prices) throws SystemException {
+        if(null == productIdsList)
+            return;
+        for (String itemToAdd : productIdsList) {
+            try {
+                ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil
+                        .findByOrderAndProductId(shoppingOrder.getOrderId(),
+                                itemToAdd);
+                if (null == shoppingOrderItem) {
+                    // meaning that there is db record for that item
+                    saveOrderItem(itemToAdd, shoppingOrder.getOrderId(), prices.get(itemToAdd));
+                } else {
+                    // increase the count for that item and updates it
+                    shoppingOrderItem.setQuantity(shoppingOrderItem
+                            .getQuantity() + 1);
+                    ShoppingOrderItemLocalServiceUtil
+                            .updateShoppingOrderItem(shoppingOrderItem);
+                }
+            } catch (SystemException e) {
+                throw new SystemException(String.format(ERROR_SAVING_ORDER_ITEM, itemToAdd,
+                        e.getMessage()));
+            }
+        }
+    }
+	
+	public void saveOrderItemByProductId(String productId,
+            ShoppingOrder shoppingOrder, float price) throws SystemException {
+        if(null == productId)
+            return;
+
+        try {
+            ShoppingOrderItem shoppingOrderItem = ShoppingOrderItemLocalServiceUtil
+                    .findByOrderAndProductId(shoppingOrder.getOrderId(),
+                            productId);
+            if (null == shoppingOrderItem) {
+                // meaning that there is db record for that item
+                saveOrderItem(productId, shoppingOrder.getOrderId(), price);
+            } else {
+                // increase the count for that item and updates it
+                shoppingOrderItem.setQuantity(shoppingOrderItem
+                        .getQuantity() + 1);
+                ShoppingOrderItemLocalServiceUtil
+                        .updateShoppingOrderItem(shoppingOrderItem);
+            }
+        } catch (SystemException e) {
+            throw new SystemException(String.format(ERROR_SAVING_ORDER_ITEM, productId,
+                    e.getMessage()));
+        }
+    }
 	
 	private static final String ERROR_SAVING_ORDER_ITEM = "Error while saving order item with productId: %S. %S";
 	

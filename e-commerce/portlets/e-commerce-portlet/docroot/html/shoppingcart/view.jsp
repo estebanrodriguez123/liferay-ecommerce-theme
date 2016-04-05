@@ -17,6 +17,7 @@
  */
 --%>
 
+<%@page import="com.rivetlogic.ecommerce.beans.ShoppingCartPrefsBean"%>
 <%@page import="java.util.logging.Logger"%>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@include file="/html/init.jsp" %>
@@ -28,15 +29,22 @@ String checkoutSuccessMessage = GetterUtil.getString(portletPreferences.getValue
 String checkoutErrorMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CHECKOUT_ERROR_MESSAGE, StringPool.BLANK));
 String cartIsEmptyMessage = GetterUtil.getString(portletPreferences.getValue(PreferencesKeys.CART_EMPTY_MESSAGE, StringPool.BLANK));
 DecimalFormat decimalFormat = new DecimalFormat(ShoppingCartPortletConstants.DECIMAL_FORMAT);
+ShoppingCartPrefsBean prefs = (ShoppingCartPrefsBean) request.getAttribute("prefs");
 %>
 
 	<portlet:actionURL name="checkout" var="checkoutURL">
+		<portlet:param name="REDIRECT" value="<%= PortalUtil.getCurrentURL(renderRequest) %>"/>
+	</portlet:actionURL>
+	
+	<portlet:actionURL name="checkout" var="paypalCheckoutURL">
+		<portlet:param name="paypalCheckout" value="true"/>
 		<portlet:param name="REDIRECT" value="<%= PortalUtil.getCurrentURL(renderRequest) %>"/>
 	</portlet:actionURL>
 
 <liferay-ui:success key="success-message-checkout" message="<%=checkoutSuccessMessage %>" />
 <liferay-ui:error key="error-message-checkout" message="<%=checkoutErrorMessage %>" />
 
+<input type="hidden" id="page-reloaded" value="no" />
 <div class="row-fluid">
       	<div class="span12">
       		<div class="block">
@@ -115,7 +123,10 @@ DecimalFormat decimalFormat = new DecimalFormat(ShoppingCartPortletConstants.DEC
         <div class="span12">
           <div class="alert alert-info"><span class="text-error">*</span> indicates required field</div>
           <liferay-ui:error key="error-information-required" message="checkout-information-required-not-found" />
-          <form class="form-horizontal" action="${checkoutURL}" method="post">
+          <div id="page-reload-warning" class="alert alert-warning hide">
+          	<liferay-ui:message key="reload-message-checkout" />
+          </div>
+          <form id="form-checkout" class="form-horizontal" method="post">
             <div class="row-fluid">
               <div class="control-group span6">
                 <label for="email">Email Address <span class="text-error">*</span></label>
@@ -415,8 +426,11 @@ DecimalFormat decimalFormat = new DecimalFormat(ShoppingCartPortletConstants.DEC
             </div>
             <div class="row-fluid">
               <div class="control-group span12">
-                <div class="controls">
-                  <button type="submit" class="btn btn-primary pull-right">Checkout</button>
+                <div class="controls pull-right">
+                  <c:if test="${prefs.isPaypalEnabled()}">
+                  	<button type="button" class="btn btn-primary" id="btn-paypal-checkout">Paypal Checkout</button>
+                  </c:if>
+                  <button type="button" class="btn btn-primary" id="btn-checkout">Offline Checkout</button>
                 </div>
               </div>
             </div>
@@ -435,5 +449,26 @@ DecimalFormat decimalFormat = new DecimalFormat(ShoppingCartPortletConstants.DEC
     });
     A.all('.quantity-input').on('change', function(event){
     	A.ShoppingCart.updateCartItem(event.currentTarget);
+    });
+    A.all('#btn-checkout').on('click', function(event){
+    	A.ShoppingCart.doCheckout('${checkoutURL}');
+    });
+    <c:if test="${prefs.isPaypalEnabled()}">
+    A.all('#btn-paypal-checkout').on('click', function(event){
+    	A.ShoppingCart.doCheckout('${paypalCheckoutURL}');
+    });
+    </c:if>
+    
+    var pageReloaded = A.one('#page-reloaded');
+    
+    A.on('unload', function(){
+    	pageReloaded.attr('value', 'yes');
+    });
+    
+    A.ready(function(){
+        if(pageReloaded.attr('value') == 'yes') {
+        	A.all('#btn-checkout, #btn-paypal-checkout').attr('disabled', true);
+        	A.all('#page-reload-warning').removeClass('hide');
+        }
     });
 </aui:script>

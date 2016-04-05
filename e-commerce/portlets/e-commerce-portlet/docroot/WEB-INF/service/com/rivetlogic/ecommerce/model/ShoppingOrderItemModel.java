@@ -144,6 +144,20 @@ public interface ShoppingOrderItemModel extends BaseModel<ShoppingOrderItem> {
 	 */
 	public void setQuantity(int quantity);
 
+	/**
+	 * Returns the price of this Shopping Order Item.
+	 *
+	 * @return the price of this Shopping Order Item
+	 */
+	public double getPrice();
+
+	/**
+	 * Sets the price of this Shopping Order Item.
+	 *
+	 * @param price the price of this Shopping Order Item
+	 */
+	public void setPrice(double price);
+
 	@Override
 	public boolean isNew();
 

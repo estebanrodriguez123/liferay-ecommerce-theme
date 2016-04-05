@@ -30,7 +30,7 @@ ShoppingCartPrefsBean shoppingCartPrefsBean = (ShoppingCartPrefsBean)request.get
   <strong>All</strong> configuration fields are required. Looks like you did not enter all of them!
 </div>
 
-<liferay-ui:tabs names="Store Email,Customer Email,Messages" refresh="false" tabsValues="Store Email,Customer Email,Messages" type="pills">
+<liferay-ui:tabs names="Store Email,Customer Email,Messages,Paypal" refresh="false" tabsValues="Store Email,Customer Email,Messages,Paypal" type="pills">
 	<aui:form action="<%= configurationURL %>" method="post" name="fm">
 		<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 	    <liferay-ui:section>
@@ -49,6 +49,10 @@ ShoppingCartPrefsBean shoppingCartPrefsBean = (ShoppingCartPrefsBean)request.get
 			<aui:input name="preferences--checkoutSuccessMessage--" label="checkout-success-label" type="text" value="<%= shoppingCartPrefsBean.getCheckoutSuccessMessage() %>" required="true"/>
 			<aui:input name="preferences--checkoutErrorMessage--" label="checkout-error-label" type="text" value="<%= shoppingCartPrefsBean.getCheckoutErrorMessage() %>" required="true"/>
 			<aui:input name="preferences--cartEmptyMessage--" label="empty-cart-message-label" type="text" value="<%= shoppingCartPrefsBean.getCartIsEmptyMessage() %>" required="true"/>
+	    </liferay-ui:section>
+	    <liferay-ui:section>
+	    	<aui:input name="preferences--enablePaypal--" label="enable-paypal" type="checkbox" value="<%= shoppingCartPrefsBean.isPaypalEnabled() %>"/>
+	    	<aui:input name="preferences--paypalEmail--" label="paypal-email" type="text" value="<%= shoppingCartPrefsBean.getPaypalEmail() %>"/>
 	    </liferay-ui:section>
  		<aui:button-row>
 		   	<aui:button type="submit" onclick="getEmailsText()"/>

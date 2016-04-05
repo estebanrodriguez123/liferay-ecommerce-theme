@@ -7,6 +7,19 @@
 			<access>PROPERTY</access>
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
+	<mapped-superclass class="com.rivetlogic.ecommerce.model.impl.NotificationModelImpl">
+		<id-class class="com.rivetlogic.ecommerce.service.persistence.NotificationPK" />
+		<attributes>
+			<id name="orderId" />
+			<id name="recipients" />
+			<basic name="subject" />
+			<basic name="body" />
+			<basic name="sender" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
 	<mapped-superclass class="com.rivetlogic.ecommerce.model.impl.ShoppingOrderModelImpl">
 		<attributes>
 			<id name="orderId" />
@@ -30,6 +43,7 @@
 			<basic name="shippingPostalCode" />
 			<basic name="shippingStateProvince" />
 			<basic name="shippingCountry" />
+			<basic name="total" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
@@ -48,11 +62,16 @@
 			<basic name="productId" />
 			<basic name="orderId" />
 			<basic name="quantity" />
+			<basic name="price" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 		</attributes>
 	</mapped-superclass>
+	<entity class="com.rivetlogic.ecommerce.model.impl.NotificationImpl" name="Notification">
+		<table name="rivetlogic_ecommerce_Notification" />
+		<attributes />
+	</entity>
 	<entity class="com.rivetlogic.ecommerce.model.impl.ShoppingOrderImpl" name="ShoppingOrder">
 		<table name="rivetlogic_ecommerce_ShoppingOrder" />
 		<attributes />

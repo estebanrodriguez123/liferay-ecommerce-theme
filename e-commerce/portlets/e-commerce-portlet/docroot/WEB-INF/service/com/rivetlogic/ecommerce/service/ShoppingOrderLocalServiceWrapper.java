@@ -315,10 +315,12 @@ public class ShoppingOrderLocalServiceWrapper
 	public void placeOrder(
 		com.rivetlogic.ecommerce.model.ShoppingOrder shoppingOrder,
 		com.liferay.portal.kernel.messaging.Message[] notifMessages,
-		java.util.List<java.lang.String> orderItemsProductIdsList)
+		java.util.List<java.lang.String> orderItemsProductIdsList,
+		java.util.Map<java.lang.String, java.lang.Float> prices,
+		boolean paypalEnabled)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_shoppingOrderLocalService.placeOrder(shoppingOrder, notifMessages,
-			orderItemsProductIdsList);
+			orderItemsProductIdsList, prices, paypalEnabled);
 	}
 
 	@Override

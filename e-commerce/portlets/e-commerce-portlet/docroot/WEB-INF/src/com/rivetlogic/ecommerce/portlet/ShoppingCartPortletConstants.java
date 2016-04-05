@@ -39,6 +39,7 @@ public class ShoppingCartPortletConstants {
     
     public static final String SHOPPING_CART_ITEMS = "shoppingCartItems";
     public static final String COOKIE_SHOPPING_CART_ITEMS = "SHOPPING_CART_ITEMS";
+    public static final String COOKIE_SHOPPING_CART_PRICES = "SHOPPING_CART_PRICES";
     
     public static final String CHECKOUT_PARAMETER_NAME = "name";
     public static final String CHECKOUT_PARAMETER_EMAIL = "email";
@@ -49,6 +50,7 @@ public class ShoppingCartPortletConstants {
     public static final String CHECKOUT_PARAMETER_POSTAL_CODE = "postalCode";
     public static final String CHECKOUT_PARAMETER_COUNTRY = "country";
     public static final String CHECKOUT_PARAMETER_PHONE = "phone";
+    public static final String CHECKOUT_PARAMETER_PAYPAL = "paypalCheckout";
     
     public static final String SUCCESS_MESSAGE_CHECKOUT = "success-message-checkout";
     public static final String ERROR_MESSAGE_CHECKOUT = "error-message-checkout";

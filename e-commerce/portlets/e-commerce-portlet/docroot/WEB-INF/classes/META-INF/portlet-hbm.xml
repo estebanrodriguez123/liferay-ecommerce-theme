@@ -2,8 +2,19 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="com.rivetlogic.ecommerce.model.Notification" />
 	<import class="com.rivetlogic.ecommerce.model.ShoppingOrder" />
 	<import class="com.rivetlogic.ecommerce.model.ShoppingOrderItem" />
+	<class name="com.rivetlogic.ecommerce.model.impl.NotificationImpl" table="rivetlogic_ecommerce_Notification">
+		<cache usage="read-write" />
+		<composite-id name="primaryKey" class="com.rivetlogic.ecommerce.service.persistence.NotificationPK">
+			<key-property name="orderId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="recipients" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		</composite-id>
+		<property name="subject" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="body" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="sender" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
 	<class name="com.rivetlogic.ecommerce.model.impl.ShoppingOrderImpl" table="rivetlogic_ecommerce_ShoppingOrder">
 		<cache usage="read-write" />
 		<id name="orderId" type="long">
@@ -25,6 +36,7 @@
 		<property name="shippingPostalCode" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="shippingStateProvince" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="shippingCountry" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="total" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
 	</class>
 	<class name="com.rivetlogic.ecommerce.model.impl.ShoppingOrderItemImpl" table="rivetlogic_ecommerce_ShoppingOrderItem">
 		<cache usage="read-write" />
@@ -36,5 +48,6 @@
 		<property name="productId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="orderId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="quantity" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="price" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
 	</class>
 </hibernate-mapping>

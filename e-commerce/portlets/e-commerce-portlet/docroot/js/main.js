@@ -49,7 +49,7 @@ AUI.add('shopping-cart', function(A, NAME) {
     };
     
     ns.doCheckout = function(checkoutUrl) {
-    	window.location.assign(checkoutUrl);
+    	A.one('#form-checkout').attr('action', checkoutUrl).submit();
     };
     
     ns.updateCartItem = function(quantityInput) {
