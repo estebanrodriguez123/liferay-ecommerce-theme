@@ -42,6 +42,15 @@
 			<finder-column name="userId" />
 		</finder>
 		
+		<finder name="GroupId" return-type="Collection">
+			<finder-column name="groupId"/>
+		</finder>
+		
+		<finder name="GroupIdAndOrderStatus" return-type="Collection">
+			<finder-column name="groupId"/>
+			<finder-column name="orderStatus"/>
+		</finder>
+		
     </entity>
 
     <entity name="ShoppingOrderItem" local-service="true" remote-service="false" human-name="Shopping Order Item">

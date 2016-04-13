@@ -329,6 +329,27 @@ public class ShoppingOrderLocalServiceWrapper
 		return _shoppingOrderLocalService.createOrder(orderId);
 	}
 
+	@Override
+	public java.util.List<com.rivetlogic.ecommerce.model.ShoppingOrder> findByGroupIdAndOrderStatus(
+		long groupId, java.lang.String orderStatus, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _shoppingOrderLocalService.findByGroupIdAndOrderStatus(groupId,
+			orderStatus, start, end);
+	}
+
+	@Override
+	public java.util.List<com.rivetlogic.ecommerce.model.ShoppingOrder> findByGroupId(
+		long groupId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _shoppingOrderLocalService.findByGroupId(groupId, start, end);
+	}
+
+	@Override
+	public int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _shoppingOrderLocalService.countByGroupId(groupId);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

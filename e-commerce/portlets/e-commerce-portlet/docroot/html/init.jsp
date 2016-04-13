@@ -74,8 +74,11 @@
 <%@page import="com.liferay.portal.kernel.util.Constants"%>
 
 <%@ page import="com.rivetlogic.ecommerce.util.PreferencesKeys"%>
+<%@ page import="com.rivetlogic.ecommerce.util.OrderStatusEnum" %>
 <%@ page import="com.rivetlogic.ecommerce.cart.ShoppingCartItem" %>
+<%@ page import="com.rivetlogic.ecommerce.model.ShoppingOrder" %>
 <%@ page import="com.rivetlogic.ecommerce.model.ShoppingOrderItem" %>
+<%@ page import="com.rivetlogic.ecommerce.service.ShoppingOrderLocalServiceUtil" %>
 <%@ page import="com.rivetlogic.ecommerce.portlet.ShoppingCartPortletConstants" %>
 <%@ page import="com.rivetlogic.ecommerce.beans.ShoppingCartPrefsBean" %>
 

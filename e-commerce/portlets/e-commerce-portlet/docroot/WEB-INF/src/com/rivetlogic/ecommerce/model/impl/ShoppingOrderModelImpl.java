@@ -96,9 +96,10 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.com.rivetlogic.ecommerce.model.ShoppingOrder"),
 			true);
-	public static long ORDERSTATUS_COLUMN_BITMASK = 1L;
-	public static long USERID_COLUMN_BITMASK = 2L;
-	public static long ORDERID_COLUMN_BITMASK = 4L;
+	public static long GROUPID_COLUMN_BITMASK = 1L;
+	public static long ORDERSTATUS_COLUMN_BITMASK = 2L;
+	public static long USERID_COLUMN_BITMASK = 4L;
+	public static long ORDERID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.rivetlogic.ecommerce.model.ShoppingOrder"));
 
@@ -290,7 +291,19 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 
 	@Override
 	public void setGroupId(long groupId) {
+		_columnBitmask |= GROUPID_COLUMN_BITMASK;
+
+		if (!_setOriginalGroupId) {
+			_setOriginalGroupId = true;
+
+			_originalGroupId = _groupId;
+		}
+
 		_groupId = groupId;
+	}
+
+	public long getOriginalGroupId() {
+		return _originalGroupId;
 	}
 
 	@Override
@@ -641,6 +654,10 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 	public void resetOriginalValues() {
 		ShoppingOrderModelImpl shoppingOrderModelImpl = this;
 
+		shoppingOrderModelImpl._originalGroupId = shoppingOrderModelImpl._groupId;
+
+		shoppingOrderModelImpl._setOriginalGroupId = false;
+
 		shoppingOrderModelImpl._originalUserId = shoppingOrderModelImpl._userId;
 
 		shoppingOrderModelImpl._setOriginalUserId = false;
@@ -911,6 +928,8 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 		};
 	private long _orderId;
 	private long _groupId;
+	private long _originalGroupId;
+	private boolean _setOriginalGroupId;
 	private long _companyId;
 	private long _userId;
 	private String _userUuid;

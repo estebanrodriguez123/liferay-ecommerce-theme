@@ -49,8 +49,9 @@ public class PaypalUtil {
                 String paypalEmail = prefsBean.getPaypalEmail();
                 String orderId = Long.toString(shoppingOrder.getOrderId());
                 double orderTotal = shoppingOrder.getTotal();
-                String firstName = shoppingOrder.getCustomerName().split(" ")[0];
-                String lastName = shoppingOrder.getCustomerName().split(" ")[1];
+                String[] names = shoppingOrder.getCustomerName().split(StringPool.SPACE);
+                String firstName = names[0];
+                String lastName = names.length > 1? names[1] : StringPool.BLANK;
                 
                 StringBuilder sb = new StringBuilder();
                 sb.append(PaypalConstants.PAYPAL_ENDPOINT).append(StringPool.QUESTION);

@@ -85,7 +85,7 @@ public class ShoppingOrderLocalServiceImpl
 	}
 	
 	public void placeOrder(ShoppingOrder shoppingOrder, Message notifMessages[], List<String>orderItemsProductIdsList, Map<String, Float> prices, boolean paypalEnabled) throws SystemException{
-		shoppingOrder.setOrderStatus(OrderStatusEnum.PLACED.toString());
+		shoppingOrder.setOrderStatus(paypalEnabled? OrderStatusEnum.PENDING.toString() : OrderStatusEnum.PLACED.toString());
 		updateOrder(shoppingOrder);
 		ShoppingOrderItemLocalServiceUtil.saveOrderItemsByProductId(orderItemsProductIdsList, shoppingOrder, prices);
 		if(!paypalEnabled && null != notifMessages)
@@ -98,6 +98,18 @@ public class ShoppingOrderLocalServiceImpl
 		ShoppingOrder shoppingOrder = createShoppingOrder(orderId); 
 		shoppingOrder.setCreateDate(DateUtil.newDate());
 		return shoppingOrder;
+	}
+	
+	public List<ShoppingOrder> findByGroupIdAndOrderStatus(long groupId, String orderStatus, int start, int end) throws SystemException {
+	    return shoppingOrderPersistence.findByGroupIdAndOrderStatus(groupId, orderStatus, start, end);
+	}
+	
+	public List<ShoppingOrder> findByGroupId(long groupId, int start, int end) throws SystemException {
+        return shoppingOrderPersistence.findByGroupId(groupId, start, end);
+    }
+	
+	public int countByGroupId(long groupId) throws SystemException {
+	    return shoppingOrderPersistence.countByGroupId(groupId);
 	}
 
 }
