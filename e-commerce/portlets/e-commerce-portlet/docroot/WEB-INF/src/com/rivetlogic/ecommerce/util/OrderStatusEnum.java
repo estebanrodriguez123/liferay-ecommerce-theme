@@ -18,10 +18,11 @@
 package com.rivetlogic.ecommerce.util;
 
 public enum OrderStatusEnum {
-	ACTIVE,
-	PLACED,
-	PENDING,
+	IN_PROGRESS,
+	WAITING_FOR_PAYPAL,
+	WAITING_FOR_PAYMENT,
 	PAID,
-	PROCESSING,
-	SHIPPED
+	PROCESSING_DELIVERY,
+	SHIPPED,
+	CANCELED
 }

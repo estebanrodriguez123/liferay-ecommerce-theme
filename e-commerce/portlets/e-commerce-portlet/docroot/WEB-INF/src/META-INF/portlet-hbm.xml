@@ -37,6 +37,7 @@
 		<property name="shippingStateProvince" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="shippingCountry" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="total" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
+		<property name="notes" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="com.rivetlogic.ecommerce.model.impl.ShoppingOrderItemImpl" table="rivetlogic_ecommerce_ShoppingOrderItem">
 		<cache usage="read-write" />

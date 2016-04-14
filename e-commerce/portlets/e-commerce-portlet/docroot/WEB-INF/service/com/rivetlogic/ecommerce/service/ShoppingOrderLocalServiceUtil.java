@@ -319,10 +319,26 @@ public class ShoppingOrderLocalServiceUtil {
 				   .findByGroupIdAndOrderStatus(groupId, orderStatus, start, end);
 	}
 
+	public static java.util.List<com.rivetlogic.ecommerce.model.ShoppingOrder> findByGroupIdAndOrderStatus(
+		long groupId, java.lang.String orderStatus, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator comparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .findByGroupIdAndOrderStatus(groupId, orderStatus, start,
+			end, comparator);
+	}
+
 	public static java.util.List<com.rivetlogic.ecommerce.model.ShoppingOrder> findByGroupId(
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().findByGroupId(groupId, start, end);
+	}
+
+	public static java.util.List<com.rivetlogic.ecommerce.model.ShoppingOrder> findByGroupId(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator comparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().findByGroupId(groupId, start, end, comparator);
 	}
 
 	public static int countByGroupId(long groupId)

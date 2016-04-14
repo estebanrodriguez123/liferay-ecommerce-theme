@@ -68,6 +68,7 @@ public class ShoppingOrderWrapper implements ShoppingOrder,
 		attributes.put("shippingStateProvince", getShippingStateProvince());
 		attributes.put("shippingCountry", getShippingCountry());
 		attributes.put("total", getTotal());
+		attributes.put("notes", getNotes());
 
 		return attributes;
 	}
@@ -181,6 +182,12 @@ public class ShoppingOrderWrapper implements ShoppingOrder,
 
 		if (total != null) {
 			setTotal(total);
+		}
+
+		String notes = (String)attributes.get("notes");
+
+		if (notes != null) {
+			setNotes(notes);
 		}
 	}
 
@@ -584,6 +591,26 @@ public class ShoppingOrderWrapper implements ShoppingOrder,
 	@Override
 	public void setTotal(double total) {
 		_shoppingOrder.setTotal(total);
+	}
+
+	/**
+	* Returns the notes of this Shopping Order.
+	*
+	* @return the notes of this Shopping Order
+	*/
+	@Override
+	public java.lang.String getNotes() {
+		return _shoppingOrder.getNotes();
+	}
+
+	/**
+	* Sets the notes of this Shopping Order.
+	*
+	* @param notes the notes of this Shopping Order
+	*/
+	@Override
+	public void setNotes(java.lang.String notes) {
+		_shoppingOrder.setNotes(notes);
 	}
 
 	@Override

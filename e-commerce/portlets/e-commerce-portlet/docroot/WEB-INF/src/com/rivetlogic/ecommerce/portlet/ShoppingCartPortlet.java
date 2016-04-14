@@ -214,7 +214,6 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		ShoppingOrder activeShoppingOrder = null;
 		List<String> orderItemsIdsList = null;
 		Map<String, Float> prices = null;
-		System.out.println("ScopeGID = " + themeDisplay.getScopeGroupId());
 		if (themeDisplay.isSignedIn()) {
 			activeShoppingOrder = ShoppingOrderLocalServiceUtil.getUserActiveOrder(
 					themeDisplay.getUserId(),

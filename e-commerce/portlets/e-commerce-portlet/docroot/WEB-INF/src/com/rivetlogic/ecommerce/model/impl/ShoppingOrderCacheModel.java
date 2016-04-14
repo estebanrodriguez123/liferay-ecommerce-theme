@@ -38,7 +38,7 @@ public class ShoppingOrderCacheModel implements CacheModel<ShoppingOrder>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(39);
 
 		sb.append("{orderId=");
 		sb.append(orderId);
@@ -76,6 +76,8 @@ public class ShoppingOrderCacheModel implements CacheModel<ShoppingOrder>,
 		sb.append(shippingCountry);
 		sb.append(", total=");
 		sb.append(total);
+		sb.append(", notes=");
+		sb.append(notes);
 		sb.append("}");
 
 		return sb.toString();
@@ -183,6 +185,13 @@ public class ShoppingOrderCacheModel implements CacheModel<ShoppingOrder>,
 
 		shoppingOrderImpl.setTotal(total);
 
+		if (notes == null) {
+			shoppingOrderImpl.setNotes(StringPool.BLANK);
+		}
+		else {
+			shoppingOrderImpl.setNotes(notes);
+		}
+
 		shoppingOrderImpl.resetOriginalValues();
 
 		return shoppingOrderImpl;
@@ -208,6 +217,7 @@ public class ShoppingOrderCacheModel implements CacheModel<ShoppingOrder>,
 		shippingStateProvince = objectInput.readUTF();
 		shippingCountry = objectInput.readUTF();
 		total = objectInput.readDouble();
+		notes = objectInput.readUTF();
 	}
 
 	@Override
@@ -299,6 +309,13 @@ public class ShoppingOrderCacheModel implements CacheModel<ShoppingOrder>,
 		}
 
 		objectOutput.writeDouble(total);
+
+		if (notes == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(notes);
+		}
 	}
 
 	public long orderId;
@@ -319,4 +336,5 @@ public class ShoppingOrderCacheModel implements CacheModel<ShoppingOrder>,
 	public String shippingStateProvince;
 	public String shippingCountry;
 	public double total;
+	public String notes;
 }

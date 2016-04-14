@@ -282,8 +282,18 @@ public interface ShoppingOrderLocalService extends BaseLocalService,
 		long groupId, java.lang.String orderStatus, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	public java.util.List<com.rivetlogic.ecommerce.model.ShoppingOrder> findByGroupIdAndOrderStatus(
+		long groupId, java.lang.String orderStatus, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator comparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public java.util.List<com.rivetlogic.ecommerce.model.ShoppingOrder> findByGroupId(
 		long groupId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<com.rivetlogic.ecommerce.model.ShoppingOrder> findByGroupId(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator comparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public int countByGroupId(long groupId)

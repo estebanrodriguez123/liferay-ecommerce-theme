@@ -2073,6 +2073,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 		shoppingOrderImpl.setShippingStateProvince(shoppingOrder.getShippingStateProvince());
 		shoppingOrderImpl.setShippingCountry(shoppingOrder.getShippingCountry());
 		shoppingOrderImpl.setTotal(shoppingOrder.getTotal());
+		shoppingOrderImpl.setNotes(shoppingOrder.getNotes());
 
 		return shoppingOrderImpl;
 	}

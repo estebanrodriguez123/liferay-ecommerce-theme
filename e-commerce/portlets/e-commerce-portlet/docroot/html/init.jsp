@@ -54,6 +54,9 @@
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="java.util.logging.Logger"%>
 
+<%@page import="com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil" %>
+<%@page import="com.liferay.portal.kernel.util.OrderByComparator" %>
+
 <%@ page import="javax.portlet.PortletURL" %>
 <%@ page import="java.util.Arrays" %>
 <%@ page import="java.util.List" %>
@@ -79,6 +82,7 @@
 <%@ page import="com.rivetlogic.ecommerce.model.ShoppingOrder" %>
 <%@ page import="com.rivetlogic.ecommerce.model.ShoppingOrderItem" %>
 <%@ page import="com.rivetlogic.ecommerce.service.ShoppingOrderLocalServiceUtil" %>
+<%@ page import="com.rivetlogic.ecommerce.service.ShoppingOrderItemLocalServiceUtil" %>
 <%@ page import="com.rivetlogic.ecommerce.portlet.ShoppingCartPortletConstants" %>
 <%@ page import="com.rivetlogic.ecommerce.beans.ShoppingCartPrefsBean" %>
 

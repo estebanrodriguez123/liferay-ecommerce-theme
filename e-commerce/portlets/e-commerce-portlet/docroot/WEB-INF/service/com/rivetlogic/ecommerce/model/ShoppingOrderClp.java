@@ -93,6 +93,7 @@ public class ShoppingOrderClp extends BaseModelImpl<ShoppingOrder>
 		attributes.put("shippingStateProvince", getShippingStateProvince());
 		attributes.put("shippingCountry", getShippingCountry());
 		attributes.put("total", getTotal());
+		attributes.put("notes", getNotes());
 
 		return attributes;
 	}
@@ -206,6 +207,12 @@ public class ShoppingOrderClp extends BaseModelImpl<ShoppingOrder>
 
 		if (total != null) {
 			setTotal(total);
+		}
+
+		String notes = (String)attributes.get("notes");
+
+		if (notes != null) {
+			setNotes(notes);
 		}
 	}
 
@@ -638,6 +645,29 @@ public class ShoppingOrderClp extends BaseModelImpl<ShoppingOrder>
 		}
 	}
 
+	@Override
+	public String getNotes() {
+		return _notes;
+	}
+
+	@Override
+	public void setNotes(String notes) {
+		_notes = notes;
+
+		if (_shoppingOrderRemoteModel != null) {
+			try {
+				Class<?> clazz = _shoppingOrderRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setNotes", String.class);
+
+				method.invoke(_shoppingOrderRemoteModel, notes);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
 	public BaseModel<?> getShoppingOrderRemoteModel() {
 		return _shoppingOrderRemoteModel;
 	}
@@ -726,6 +756,7 @@ public class ShoppingOrderClp extends BaseModelImpl<ShoppingOrder>
 		clone.setShippingStateProvince(getShippingStateProvince());
 		clone.setShippingCountry(getShippingCountry());
 		clone.setTotal(getTotal());
+		clone.setNotes(getNotes());
 
 		return clone;
 	}
@@ -778,7 +809,7 @@ public class ShoppingOrderClp extends BaseModelImpl<ShoppingOrder>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(39);
 
 		sb.append("{orderId=");
 		sb.append(getOrderId());
@@ -816,6 +847,8 @@ public class ShoppingOrderClp extends BaseModelImpl<ShoppingOrder>
 		sb.append(getShippingCountry());
 		sb.append(", total=");
 		sb.append(getTotal());
+		sb.append(", notes=");
+		sb.append(getNotes());
 		sb.append("}");
 
 		return sb.toString();
@@ -823,7 +856,7 @@ public class ShoppingOrderClp extends BaseModelImpl<ShoppingOrder>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(58);
+		StringBundler sb = new StringBundler(61);
 
 		sb.append("<model><model-name>");
 		sb.append("com.rivetlogic.ecommerce.model.ShoppingOrder");
@@ -901,6 +934,10 @@ public class ShoppingOrderClp extends BaseModelImpl<ShoppingOrder>
 			"<column><column-name>total</column-name><column-value><![CDATA[");
 		sb.append(getTotal());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>notes</column-name><column-value><![CDATA[");
+		sb.append(getNotes());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -926,6 +963,7 @@ public class ShoppingOrderClp extends BaseModelImpl<ShoppingOrder>
 	private String _shippingStateProvince;
 	private String _shippingCountry;
 	private double _total;
+	private String _notes;
 	private BaseModel<?> _shoppingOrderRemoteModel;
 	private Class<?> _clpSerializerClass = com.rivetlogic.ecommerce.service.ClpSerializer.class;
 }

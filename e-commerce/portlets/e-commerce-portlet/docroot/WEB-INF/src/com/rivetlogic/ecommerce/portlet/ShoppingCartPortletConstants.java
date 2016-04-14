@@ -63,6 +63,11 @@ public class ShoppingCartPortletConstants {
     
     public static final String CURRENT_ORDER_ITEMS = "currentOrderItems";
     
+    public static final String ORDER_TABLE_NAME = "rivetlogic_ecommerce_ShoppingOrder";
+    public static final String ORDER_ID = "orderId";
+    public static final String STATUS_UPDATE = "newStatus";
+    public static final String NOTES_UPDATE = "notes";
+    
     public static final String DECIMAL_FORMAT = "0.00";
 
 }
