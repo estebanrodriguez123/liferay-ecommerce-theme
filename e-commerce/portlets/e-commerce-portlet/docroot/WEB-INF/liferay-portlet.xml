@@ -16,7 +16,7 @@
 	</portlet>
 	<portlet>
 		<portlet-name>shopping-orders</portlet-name>
-		<icon>/icon.png</icon>
+		<icon>/shopping.png</icon>
 		<control-panel-entry-category>
 			site_administration.content
 		</control-panel-entry-category>
