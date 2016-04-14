@@ -5,6 +5,10 @@
 	ShoppingOrder order = ShoppingOrderLocalServiceUtil.fetchShoppingOrder(orderId);
 	List<ShoppingOrderItem> items = ShoppingOrderItemLocalServiceUtil.findByOrderId(orderId);
 	pageContext.setAttribute("order", order);
+	String statusKey = order.getOrderStatus().toLowerCase();
+	pageContext.setAttribute("statusKey", statusKey);
+	String status = LanguageUtil.get(pageContext, "order-status-" + statusKey);
+	pageContext.setAttribute("status", status);
 %>
 
 <liferay-ui:success key="success" message="order-notes-update-success" />
@@ -25,7 +29,7 @@
 			<aui:input name="createDate" label="created" disabled="true" type="text" />
 			<aui:input name="modifiedDate" label="last-modified" disabled="true" type="text" />
 			<aui:input name="total" disabled="true" />
-			<aui:input name="orderStatus" disabled="true" helpMessage="help-status-${ order.orderStatus.toLowerCase() }" />
+			<aui:input name="order-status" type="text" disabled="true" value="${ status }" helpMessage="help-status-${ statusKey }" />
 			<aui:form action="<%= updateNotesURL %>">
 			<aui:input name="notes" type="textarea"/>
 			<aui:button-row>

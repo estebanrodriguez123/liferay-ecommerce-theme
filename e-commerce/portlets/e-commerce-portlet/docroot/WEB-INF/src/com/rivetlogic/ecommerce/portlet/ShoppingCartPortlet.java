@@ -229,6 +229,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			if (null != orderItemsIdsList) {
 				activeShoppingOrder = ShoppingOrderLocalServiceUtil.createOrder(CounterLocalServiceUtil.increment(ShoppingOrderItem.class.getName()));
 				activeShoppingOrder.setGroupId(themeDisplay.getScopeGroupId());
+				activeShoppingOrder.setCompanyId(themeDisplay.getCompanyId());
 				activeShoppingOrder.setUserId(-1l);
 				activeShoppingOrder.setUserName(RoleConstants.GUEST);
 			}
