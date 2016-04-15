@@ -5,7 +5,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.rivetlogic.ecommerce.model.ShoppingOrder;
 import com.rivetlogic.ecommerce.service.ShoppingOrderLocalServiceUtil;
@@ -26,7 +25,7 @@ public class OrdersPortlet extends MVCPortlet {
     public void updateOrderStatus(ActionRequest request, ActionResponse response) throws IOException, PortletException {
         long orderId = ParamUtil.getLong(request, ShoppingCartPortletConstants.ORDER_ID);
         String newStatus = ParamUtil.getString(request, ShoppingCartPortletConstants.STATUS_UPDATE);
-        String redirect = ParamUtil.getString(request, WebKeys.REDIRECT);
+        String redirect = ParamUtil.getString(request, "redirect");
         LOG.debug(String.format("Updating order %s with status %s", orderId, newStatus));
         
         try {
@@ -43,7 +42,7 @@ public class OrdersPortlet extends MVCPortlet {
     public void updateOrderNotes(ActionRequest request, ActionResponse response) throws IOException, PortletException {
         long orderId = ParamUtil.getLong(request, ShoppingCartPortletConstants.ORDER_ID);
         String notes = ParamUtil.getString(request, ShoppingCartPortletConstants.NOTES_UPDATE);
-        String redirect = ParamUtil.getString(request, WebKeys.REDIRECT);
+        String redirect = ParamUtil.getString(request, "redirect");
         LOG.debug(String.format("Updating notes for order %s", orderId));
         try {
             ShoppingOrder order = ShoppingOrderLocalServiceUtil.fetchShoppingOrder(orderId);
