@@ -139,6 +139,34 @@ public class ShoppingOrderLocalServiceClpInvoker {
 		_methodName50 = "createOrder";
 
 		_methodParameterTypes50 = new String[] { "long" };
+
+		_methodName51 = "findByGroupIdAndOrderStatus";
+
+		_methodParameterTypes51 = new String[] {
+				"long", "java.lang.String", "int", "int"
+			};
+
+		_methodName52 = "findByGroupIdAndOrderStatus";
+
+		_methodParameterTypes52 = new String[] {
+				"long", "java.lang.String", "int", "int",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			};
+
+		_methodName53 = "findByGroupId";
+
+		_methodParameterTypes53 = new String[] { "long", "int", "int" };
+
+		_methodName54 = "findByGroupId";
+
+		_methodParameterTypes54 = new String[] {
+				"long", "int", "int",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			};
+
+		_methodName55 = "countByGroupId";
+
+		_methodParameterTypes55 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -277,6 +305,43 @@ public class ShoppingOrderLocalServiceClpInvoker {
 			return ShoppingOrderLocalServiceUtil.createOrder(((Long)arguments[0]).longValue());
 		}
 
+		if (_methodName51.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
+			return ShoppingOrderLocalServiceUtil.findByGroupIdAndOrderStatus(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1],
+				((Integer)arguments[2]).intValue(),
+				((Integer)arguments[3]).intValue());
+		}
+
+		if (_methodName52.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
+			return ShoppingOrderLocalServiceUtil.findByGroupIdAndOrderStatus(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1],
+				((Integer)arguments[2]).intValue(),
+				((Integer)arguments[3]).intValue(),
+				(com.liferay.portal.kernel.util.OrderByComparator)arguments[4]);
+		}
+
+		if (_methodName53.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
+			return ShoppingOrderLocalServiceUtil.findByGroupId(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue(),
+				((Integer)arguments[2]).intValue());
+		}
+
+		if (_methodName54.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
+			return ShoppingOrderLocalServiceUtil.findByGroupId(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue(),
+				((Integer)arguments[2]).intValue(),
+				(com.liferay.portal.kernel.util.OrderByComparator)arguments[3]);
+		}
+
+		if (_methodName55.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
+			return ShoppingOrderLocalServiceUtil.countByGroupId(((Long)arguments[0]).longValue());
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -326,4 +391,14 @@ public class ShoppingOrderLocalServiceClpInvoker {
 	private String[] _methodParameterTypes49;
 	private String _methodName50;
 	private String[] _methodParameterTypes50;
+	private String _methodName51;
+	private String[] _methodParameterTypes51;
+	private String _methodName52;
+	private String[] _methodParameterTypes52;
+	private String _methodName53;
+	private String[] _methodParameterTypes53;
+	private String _methodName54;
+	private String[] _methodParameterTypes54;
+	private String _methodName55;
+	private String[] _methodParameterTypes55;
 }

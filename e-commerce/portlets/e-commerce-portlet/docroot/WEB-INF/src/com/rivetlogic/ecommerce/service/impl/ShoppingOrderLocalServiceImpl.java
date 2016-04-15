@@ -22,6 +22,7 @@ import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.rivetlogic.ecommerce.model.ShoppingOrder;
 import com.rivetlogic.ecommerce.notification.util.EmailNotificationUtil;
 import com.rivetlogic.ecommerce.service.ShoppingOrderItemLocalServiceUtil;
@@ -60,14 +61,14 @@ public class ShoppingOrderLocalServiceImpl
 	}
 	
 	public ShoppingOrder getUserActiveOrder(long userId, long groupId, long companyId, boolean createIfNotFound) throws SystemException{
-		List<ShoppingOrder> activeOrders = findByOrderStatusAndUserId(OrderStatusEnum.ACTIVE.toString(), userId);
+		List<ShoppingOrder> activeOrders = findByOrderStatusAndUserId(OrderStatusEnum.IN_PROGRESS.toString(), userId);
 		ShoppingOrder activeShoppingOrder = null;
 		if(null != activeOrders && !activeOrders.isEmpty()){
 			activeShoppingOrder = activeOrders.get(0);
 		}else
 			if(createIfNotFound){
 				activeShoppingOrder = ShoppingOrderLocalServiceUtil.createShoppingOrder(CounterLocalServiceUtil.increment(ShoppingOrder.class.getName()));
-				activeShoppingOrder.setOrderStatus(OrderStatusEnum.ACTIVE.toString());
+				activeShoppingOrder.setOrderStatus(OrderStatusEnum.IN_PROGRESS.toString());
 				activeShoppingOrder.setUserId(userId);
 				activeShoppingOrder.setGroupId(groupId);
 				activeShoppingOrder.setCompanyId(companyId);
@@ -85,7 +86,7 @@ public class ShoppingOrderLocalServiceImpl
 	}
 	
 	public void placeOrder(ShoppingOrder shoppingOrder, Message notifMessages[], List<String>orderItemsProductIdsList, Map<String, Float> prices, boolean paypalEnabled) throws SystemException{
-		shoppingOrder.setOrderStatus(OrderStatusEnum.PLACED.toString());
+		shoppingOrder.setOrderStatus(paypalEnabled? OrderStatusEnum.WAITING_FOR_PAYPAL.toString() : OrderStatusEnum.WAITING_FOR_PAYMENT.toString());
 		updateOrder(shoppingOrder);
 		ShoppingOrderItemLocalServiceUtil.saveOrderItemsByProductId(orderItemsProductIdsList, shoppingOrder, prices);
 		if(!paypalEnabled && null != notifMessages)
@@ -98,6 +99,26 @@ public class ShoppingOrderLocalServiceImpl
 		ShoppingOrder shoppingOrder = createShoppingOrder(orderId); 
 		shoppingOrder.setCreateDate(DateUtil.newDate());
 		return shoppingOrder;
+	}
+	
+	public List<ShoppingOrder> findByGroupIdAndOrderStatus(long groupId, String orderStatus, int start, int end) throws SystemException {
+	    return shoppingOrderPersistence.findByGroupIdAndOrderStatus(groupId, orderStatus, start, end);
+	}
+	
+	public List<ShoppingOrder> findByGroupIdAndOrderStatus(long groupId, String orderStatus, int start, int end, OrderByComparator comparator) throws SystemException {
+        return shoppingOrderPersistence.findByGroupIdAndOrderStatus(groupId, orderStatus, start, end, comparator);
+    }
+	
+	public List<ShoppingOrder> findByGroupId(long groupId, int start, int end) throws SystemException {
+        return shoppingOrderPersistence.findByGroupId(groupId, start, end);
+    }
+	
+	public List<ShoppingOrder> findByGroupId(long groupId, int start, int end, OrderByComparator comparator) throws SystemException {
+        return shoppingOrderPersistence.findByGroupId(groupId, start, end, comparator);
+    }
+	
+	public int countByGroupId(long groupId) throws SystemException {
+	    return shoppingOrderPersistence.countByGroupId(groupId);
 	}
 
 }

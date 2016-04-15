@@ -78,9 +78,10 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 			{ "shippingPostalCode", Types.VARCHAR },
 			{ "shippingStateProvince", Types.VARCHAR },
 			{ "shippingCountry", Types.VARCHAR },
-			{ "total", Types.DOUBLE }
+			{ "total", Types.DOUBLE },
+			{ "notes", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table rivetlogic_ecommerce_ShoppingOrder (orderId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,orderStatus VARCHAR(75) null,customerEmail VARCHAR(75) null,customerName VARCHAR(75) null,customerPhone VARCHAR(75) null,shippingAddress1 VARCHAR(75) null,shippingAddress2 VARCHAR(75) null,shippingCity VARCHAR(75) null,shippingPostalCode VARCHAR(75) null,shippingStateProvince VARCHAR(75) null,shippingCountry VARCHAR(75) null,total DOUBLE)";
+	public static final String TABLE_SQL_CREATE = "create table rivetlogic_ecommerce_ShoppingOrder (orderId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,orderStatus VARCHAR(75) null,customerEmail VARCHAR(75) null,customerName VARCHAR(75) null,customerPhone VARCHAR(75) null,shippingAddress1 VARCHAR(75) null,shippingAddress2 VARCHAR(75) null,shippingCity VARCHAR(75) null,shippingPostalCode VARCHAR(75) null,shippingStateProvince VARCHAR(75) null,shippingCountry VARCHAR(75) null,total DOUBLE,notes VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table rivetlogic_ecommerce_ShoppingOrder";
 	public static final String ORDER_BY_JPQL = " ORDER BY shoppingOrder.orderId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY rivetlogic_ecommerce_ShoppingOrder.orderId ASC";
@@ -96,9 +97,10 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.com.rivetlogic.ecommerce.model.ShoppingOrder"),
 			true);
-	public static long ORDERSTATUS_COLUMN_BITMASK = 1L;
-	public static long USERID_COLUMN_BITMASK = 2L;
-	public static long ORDERID_COLUMN_BITMASK = 4L;
+	public static long GROUPID_COLUMN_BITMASK = 1L;
+	public static long ORDERSTATUS_COLUMN_BITMASK = 2L;
+	public static long USERID_COLUMN_BITMASK = 4L;
+	public static long ORDERID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.rivetlogic.ecommerce.model.ShoppingOrder"));
 
@@ -157,6 +159,7 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 		attributes.put("shippingStateProvince", getShippingStateProvince());
 		attributes.put("shippingCountry", getShippingCountry());
 		attributes.put("total", getTotal());
+		attributes.put("notes", getNotes());
 
 		return attributes;
 	}
@@ -271,6 +274,12 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 		if (total != null) {
 			setTotal(total);
 		}
+
+		String notes = (String)attributes.get("notes");
+
+		if (notes != null) {
+			setNotes(notes);
+		}
 	}
 
 	@Override
@@ -290,7 +299,19 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 
 	@Override
 	public void setGroupId(long groupId) {
+		_columnBitmask |= GROUPID_COLUMN_BITMASK;
+
+		if (!_setOriginalGroupId) {
+			_setOriginalGroupId = true;
+
+			_originalGroupId = _groupId;
+		}
+
 		_groupId = groupId;
+	}
+
+	public long getOriginalGroupId() {
+		return _originalGroupId;
 	}
 
 	@Override
@@ -540,6 +561,21 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 		_total = total;
 	}
 
+	@Override
+	public String getNotes() {
+		if (_notes == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _notes;
+		}
+	}
+
+	@Override
+	public void setNotes(String notes) {
+		_notes = notes;
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -589,6 +625,7 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 		shoppingOrderImpl.setShippingStateProvince(getShippingStateProvince());
 		shoppingOrderImpl.setShippingCountry(getShippingCountry());
 		shoppingOrderImpl.setTotal(getTotal());
+		shoppingOrderImpl.setNotes(getNotes());
 
 		shoppingOrderImpl.resetOriginalValues();
 
@@ -640,6 +677,10 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 	@Override
 	public void resetOriginalValues() {
 		ShoppingOrderModelImpl shoppingOrderModelImpl = this;
+
+		shoppingOrderModelImpl._originalGroupId = shoppingOrderModelImpl._groupId;
+
+		shoppingOrderModelImpl._setOriginalGroupId = false;
 
 		shoppingOrderModelImpl._originalUserId = shoppingOrderModelImpl._userId;
 
@@ -771,12 +812,20 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 
 		shoppingOrderCacheModel.total = getTotal();
 
+		shoppingOrderCacheModel.notes = getNotes();
+
+		String notes = shoppingOrderCacheModel.notes;
+
+		if ((notes != null) && (notes.length() == 0)) {
+			shoppingOrderCacheModel.notes = null;
+		}
+
 		return shoppingOrderCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(39);
 
 		sb.append("{orderId=");
 		sb.append(getOrderId());
@@ -814,6 +863,8 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 		sb.append(getShippingCountry());
 		sb.append(", total=");
 		sb.append(getTotal());
+		sb.append(", notes=");
+		sb.append(getNotes());
 		sb.append("}");
 
 		return sb.toString();
@@ -821,7 +872,7 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(58);
+		StringBundler sb = new StringBundler(61);
 
 		sb.append("<model><model-name>");
 		sb.append("com.rivetlogic.ecommerce.model.ShoppingOrder");
@@ -899,6 +950,10 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 			"<column><column-name>total</column-name><column-value><![CDATA[");
 		sb.append(getTotal());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>notes</column-name><column-value><![CDATA[");
+		sb.append(getNotes());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -911,6 +966,8 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 		};
 	private long _orderId;
 	private long _groupId;
+	private long _originalGroupId;
+	private boolean _setOriginalGroupId;
 	private long _companyId;
 	private long _userId;
 	private String _userUuid;
@@ -931,6 +988,7 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 	private String _shippingStateProvince;
 	private String _shippingCountry;
 	private double _total;
+	private String _notes;
 	private long _columnBitmask;
 	private ShoppingOrder _escapedModel;
 }

@@ -107,7 +107,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			try {
 				ShoppingOrder activeShoppingOrder = ShoppingOrderLocalServiceUtil.getUserActiveOrder(
 						themeDisplay.getUserId(),
-						themeDisplay.getCompanyGroupId(),
+						themeDisplay.getScopeGroupId(),
 						themeDisplay.getCompanyId(),
 						Boolean.FALSE);
 				if (null != activeShoppingOrder) {
@@ -214,11 +214,10 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		ShoppingOrder activeShoppingOrder = null;
 		List<String> orderItemsIdsList = null;
 		Map<String, Float> prices = null;
-		
 		if (themeDisplay.isSignedIn()) {
 			activeShoppingOrder = ShoppingOrderLocalServiceUtil.getUserActiveOrder(
 					themeDisplay.getUserId(),
-					themeDisplay.getCompanyGroupId(),
+					themeDisplay.getScopeGroupId(),
 					themeDisplay.getCompanyId(),
 					Boolean.TRUE);
 			List<ShoppingOrderItem> orderItemsList = ShoppingOrderItemLocalServiceUtil.findByOrderId(activeShoppingOrder.getOrderId());
@@ -229,6 +228,8 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			prices = getSessionOrderItemPrices(request);
 			if (null != orderItemsIdsList) {
 				activeShoppingOrder = ShoppingOrderLocalServiceUtil.createOrder(CounterLocalServiceUtil.increment(ShoppingOrderItem.class.getName()));
+				activeShoppingOrder.setGroupId(themeDisplay.getScopeGroupId());
+				activeShoppingOrder.setCompanyId(themeDisplay.getCompanyId());
 				activeShoppingOrder.setUserId(-1l);
 				activeShoppingOrder.setUserName(RoleConstants.GUEST);
 			}
@@ -419,7 +420,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 			} else {
 				ShoppingOrder activeShoppingOrder = ShoppingOrderLocalServiceUtil.getUserActiveOrder(
 						themeDisplay.getUserId(),
-						themeDisplay.getCompanyGroupId(),
+						themeDisplay.getScopeGroupId(),
 						themeDisplay.getCompanyId(),
 						Boolean.TRUE);
 				ShoppingOrderItemLocalServiceUtil.saveOrderItemByProductId(itemId, activeShoppingOrder, price);
@@ -457,7 +458,7 @@ public class ShoppingCartPortlet extends MVCPortlet {
 		} else {
 			ShoppingOrder activeShoppingOrder = ShoppingOrderLocalServiceUtil.getUserActiveOrder(
 					themeDisplay.getUserId(),
-					themeDisplay.getCompanyGroupId(),
+					themeDisplay.getScopeGroupId(),
 					themeDisplay.getCompanyId(),
 					Boolean.FALSE);
 			if (null != activeShoppingOrder) {

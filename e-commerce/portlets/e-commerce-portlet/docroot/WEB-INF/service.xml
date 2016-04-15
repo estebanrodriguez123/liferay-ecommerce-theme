@@ -36,10 +36,20 @@
 		<column name="shippingStateProvince" type="String"/>
 		<column name="shippingCountry" type="String"/>
         <column name="total" type="double"></column>
+        <column name="notes" type="String"/>
 		
 		<finder name="OrderStatusAndUserId" return-type="Collection">
 			<finder-column name="orderStatus" />
 			<finder-column name="userId" />
+		</finder>
+		
+		<finder name="GroupId" return-type="Collection">
+			<finder-column name="groupId"/>
+		</finder>
+		
+		<finder name="GroupIdAndOrderStatus" return-type="Collection">
+			<finder-column name="groupId"/>
+			<finder-column name="orderStatus"/>
 		</finder>
 		
     </entity>

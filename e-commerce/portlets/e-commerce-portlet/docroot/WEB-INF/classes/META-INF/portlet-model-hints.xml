@@ -29,6 +29,7 @@
 		<field name="shippingStateProvince" type="String" />
 		<field name="shippingCountry" type="String" />
 		<field name="total" type="double" />
+		<field name="notes" type="String" />
 	</model>
 	<model name="com.rivetlogic.ecommerce.model.ShoppingOrderItem">
 		<field name="itemId" type="long" />

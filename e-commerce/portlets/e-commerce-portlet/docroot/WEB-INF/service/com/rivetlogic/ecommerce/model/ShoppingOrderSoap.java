@@ -48,6 +48,7 @@ public class ShoppingOrderSoap implements Serializable {
 		soapModel.setShippingStateProvince(model.getShippingStateProvince());
 		soapModel.setShippingCountry(model.getShippingCountry());
 		soapModel.setTotal(model.getTotal());
+		soapModel.setNotes(model.getNotes());
 
 		return soapModel;
 	}
@@ -244,6 +245,14 @@ public class ShoppingOrderSoap implements Serializable {
 		_total = total;
 	}
 
+	public String getNotes() {
+		return _notes;
+	}
+
+	public void setNotes(String notes) {
+		_notes = notes;
+	}
+
 	private long _orderId;
 	private long _groupId;
 	private long _companyId;
@@ -262,4 +271,5 @@ public class ShoppingOrderSoap implements Serializable {
 	private String _shippingStateProvince;
 	private String _shippingCountry;
 	private double _total;
+	private String _notes;
 }

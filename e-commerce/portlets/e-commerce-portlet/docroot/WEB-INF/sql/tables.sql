@@ -25,7 +25,8 @@ create table rivetlogic_ecommerce_ShoppingOrder (
 	shippingPostalCode VARCHAR(75) null,
 	shippingStateProvince VARCHAR(75) null,
 	shippingCountry VARCHAR(75) null,
-	total DOUBLE
+	total DOUBLE,
+	notes VARCHAR(75) null
 );
 
 create table rivetlogic_ecommerce_ShoppingOrderItem (

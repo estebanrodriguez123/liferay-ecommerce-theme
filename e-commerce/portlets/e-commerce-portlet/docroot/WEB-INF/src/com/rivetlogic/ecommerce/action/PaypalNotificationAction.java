@@ -24,10 +24,13 @@ import com.liferay.portal.kernel.struts.BaseStrutsAction;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.UnsyncPrintWriterPool;
+import com.rivetlogic.ecommerce.model.ShoppingOrder;
 import com.rivetlogic.ecommerce.model.ShoppingOrderItem;
 import com.rivetlogic.ecommerce.notification.util.EmailNotificationUtil;
 import com.rivetlogic.ecommerce.paypal.PaypalConstants;
 import com.rivetlogic.ecommerce.service.ShoppingOrderItemLocalServiceUtil;
+import com.rivetlogic.ecommerce.service.ShoppingOrderLocalServiceUtil;
+import com.rivetlogic.ecommerce.util.OrderStatusEnum;
 
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -65,6 +68,7 @@ public class PaypalNotificationAction extends BaseStrutsAction {
         
         LOG.info(String.format(LOG_NOTIFICATION, orderId, status));
                 
+        ShoppingOrder order = ShoppingOrderLocalServiceUtil.fetchShoppingOrder(orderId);
         List<ShoppingOrderItem> items = ShoppingOrderItemLocalServiceUtil.findByOrderId(orderId);
         
         if(items.isEmpty()) {
@@ -120,6 +124,9 @@ public class PaypalNotificationAction extends BaseStrutsAction {
         if (payPalStatus.equals(PaypalConstants.TRANSACTION_VERIFIED) && status.equals(PaypalConstants.PAYMENT_COMPLETE)) {
             
             LOG.info(LOG_TRX_VERIFIED);
+            
+            order.setOrderStatus(OrderStatusEnum.PAID.toString());
+            ShoppingOrderLocalServiceUtil.updateOrder(order);
             
             EmailNotificationUtil.sendEmailNotification(orderId);
                 

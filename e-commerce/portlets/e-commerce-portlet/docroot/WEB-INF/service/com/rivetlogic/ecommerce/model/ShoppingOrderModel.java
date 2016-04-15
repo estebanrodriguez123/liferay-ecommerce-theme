@@ -354,6 +354,21 @@ public interface ShoppingOrderModel extends BaseModel<ShoppingOrder>,
 	 */
 	public void setTotal(double total);
 
+	/**
+	 * Returns the notes of this Shopping Order.
+	 *
+	 * @return the notes of this Shopping Order
+	 */
+	@AutoEscape
+	public String getNotes();
+
+	/**
+	 * Sets the notes of this Shopping Order.
+	 *
+	 * @param notes the notes of this Shopping Order
+	 */
+	public void setNotes(String notes);
+
 	@Override
 	public boolean isNew();
 
